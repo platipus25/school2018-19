@@ -4,29 +4,41 @@ var Interval = luxon.Interval;
 var schedule = {
   schedule:{
     sessions:{
-      1:[{hour:7, minute:55},{hour:8, minute:59}],
-      2:[{hour:9, minute:2},{hour:10, minute:0}],
-      Break:[{hour:10, minute:0},{hour:10, minute:10}],
-      3:[{hour:10, minute:13},{hour:11, minute:11}],
-      4:[{hour:11, minute:14},{hour:12, minute:12}],
-      Lunch:[{hour:12, minute:12},{hour:12, minute:52}],
-      5:[{hour:12, minute:56},{hour:13, minute:54}],
-      6:[{hour:13, minute:57},{hour:14, minute:55}]
+      "1":[{hour:7, minute:55},{hour:8, minute:59}],
+      "p1":[{hour:8, minute:59}, {hour:9, minute:2}],
+      "2":[{hour:9, minute:2},{hour:10, minute:0}],
+      "Break":[{hour:10, minute:0},{hour:10, minute:10}],
+      "p2":[{hour:10, minute:10}, {hour:10, minute:13}],
+      "3":[{hour:10, minute:13},{hour:11, minute:11}],
+      "p3":[{hour:11, minute:11}, {hour:11, minute:14}],
+      "4":[{hour:11, minute:14},{hour:12, minute:12}],
+      "Lunch":[{hour:12, minute:12},{hour:12, minute:52}],
+      "p4":[{hour:12, minute:52}, {hour:12, minute:56}],
+      "5":[{hour:12, minute:56},{hour:13, minute:54}],
+      "p2":[{hour:13, minute:54}, {hour:13, minute:57}],
+      "6":[{hour:13, minute:57},{hour:14, minute:55}]
     },
     days:{
       Mon:{
         dropped:[],
         periods:{
-          1:[{hour:9, minute:28},{hour:10, minute:0}],
-          2:[{hour:10, minute:3},{hour:10, minute:35}],
-          3:[{hour:10, minute:38},{hour:11, minute:10}],
-          Break:[{hour:11, minute:10},{hour:11, minute:20}],
-          4:[{hour:11, minute:23},{hour:11, minute:55}],
-          5:[{hour:11, minute:58},{hour:12, minute:30}],
-          Lunch:[{hour:12, minute:30},{hour:13, minute:10}],
-          6:[{hour:13, minute:13},{hour:13, minute:45}],
-          7:[{hour:13, minute:48},{hour:14, minute:20}],
-          8:[{hour:14, minute:23},{hour:14, minute:55}]
+          "1":[{hour:9, minute:28},{hour:10, minute:0}],
+          "p1":[{hour:10, minute:0},{hour:10, minute:3}],
+          "2":[{hour:10, minute:3},{hour:10, minute:35}],
+          "p2":[{hour:10, minute:35},{hour:10, minute:38}],
+          "3":[{hour:10, minute:38},{hour:11, minute:10}],
+          "Break":[{hour:11, minute:10},{hour:11, minute:20}],
+          "p3":[{hour:11, minute:20},{hour:11, minute:23}],
+          "4":[{hour:11, minute:23},{hour:11, minute:55}],
+          "p4":[{hour:11, minute:55},{hour:11, minute:58}],
+          "5":[{hour:11, minute:58},{hour:12, minute:30}],
+          "Lunch":[{hour:12, minute:30},{hour:13, minute:10}],
+          "p5":[{hour:13, minute:10},{hour:13, minute:13}],
+          "6":[{hour:13, minute:13},{hour:13, minute:45}],
+          "p6":[{hour:13, minute:45},{hour:13, minute:48}],
+          "7":[{hour:13, minute:48},{hour:14, minute:20}],
+          "p6":[{hour:14, minute:20},{hour:14, minute:23}],
+          "8":[{hour:14, minute:23},{hour:14, minute:55}]
         }
       },
       Tue:{
