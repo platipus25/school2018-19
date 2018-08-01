@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <style>
+      body{
+        font-family:monospace;
+        font-size:5vw;
+        width:400px;
+        height:210px;
+      }
+      @media only screen and (max-width: 600px) {
+        body {
+          width:400px;
+          height:210px;
+          /*background-color: lightblue;*/
+        }
+      }
+
+      .overlay{
+        position:fixed;
+        /*display:none;*/
+        width:100%;
+        height:100%;
+        background-color:#ffffffdf;
+        z-index:2;
+
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .overlayText{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 50px;
+        color: black;
+        transform: translate(-50%,-50%);
+      }
+      .footer{
+        bottom:0;
+        position:relative;
+        left:25%;
+        width:25%;
+        font-size:4vw;
+      }
+      .label{
+        text-align: right;
+        left:50vw;
+        /*right:2vw;*/
+        position:absolute;
+      }
+      #periodInfo{
+        font-size: 8vw;
+      }
+    </style>
+    <meta name="viewport" content="width=400, initial-scale=1.0">
+  </head>
+  <body>
+    <div>Now: <span id="nowDate"></span> <span id="nowTime"></span></div>
+    <div id="periods">
+      <span id="endOfPeriodCountdown" class="countdown">0 minutes</span>
+      <br>
+      Left of <strong id="periodInfo">school</strong>
+      <br>
+      <br>
+      <strong>Next:</strong>
+      <br>
+      <span class="nextPeriod" id="period">__</span> <span class="label">Period</span>
+      <br>
+      <span class="nextPeriod" id="teacher">__</span> <span class="label">Teacher</span>
+      <br>
+      <span class="nextPeriod" id="subject">__</span> <span class="label">Subject</span>
+      <br>
+      <span class="nextPeriod" id="room">__</span> <span class="label">Room</span>
+      <br>
+      <span class="nextPeriod" id="time">__</span> <span class="label">Start Time</span>
+    </div>
+    <br>
+    <div id="dayOff">
+      <span id="dayOffCountdown" class="countdown"></span> untill <span id="nameOfBreak"></span>
+      <br>
+    </div>
+
+    <div id="noschoolOverlay" class="overlay">
+      <span id="reason" class="overlayText">loading...</span>
+    </div>
+
+    <a class="footer" href="#" id="optionsLink">Add info about your classes</a>
+
+    <script src="js/luxon.min.js"></script>
+    <script src="js/countdown.min.js"></script>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/getPeriodInfo.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/popup.js"></script>
+  </body>
+</html>
