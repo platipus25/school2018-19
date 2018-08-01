@@ -26,8 +26,10 @@ function init(now){
     var periodCountdown = countdown(function(ts){
       $('#endOfPeriodCountdown').html(ts.toHTML());
     }, thisPeriod.end.toJSDate(), countdown.HOURS| countdown.MINUTES)
-    var period = thisPeriod.period.period
-    $("#periodInfo").text(period != "Break" && period != "Lunch"?"period "+period:period)
+    console.log(thisPeriod)
+    var periodName = thisPeriod.period.period
+    console.log(periodName)
+    $("#periodInfo").text(periodName != "Break" && periodName != "Lunch" && periodName != "Passing Period"?"period "+periodName:periodName)
   }
   setNextPeriod(nextPeriod)
 

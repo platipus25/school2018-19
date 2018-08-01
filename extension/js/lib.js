@@ -5,17 +5,17 @@ var schedule = {
   schedule:{
     sessions:{
       "1":[{hour:7, minute:55},{hour:8, minute:59}],
-      "p1":[{hour:8, minute:59}, {hour:9, minute:2}],
+      "p2":[{hour:8, minute:59}, {hour:9, minute:2}],
       "2":[{hour:9, minute:2},{hour:10, minute:0}],
       "Break":[{hour:10, minute:0},{hour:10, minute:10}],
-      "p2":[{hour:10, minute:10}, {hour:10, minute:13}],
+      "p3":[{hour:10, minute:10}, {hour:10, minute:13}],
       "3":[{hour:10, minute:13},{hour:11, minute:11}],
-      "p3":[{hour:11, minute:11}, {hour:11, minute:14}],
+      "p4":[{hour:11, minute:11}, {hour:11, minute:14}],
       "4":[{hour:11, minute:14},{hour:12, minute:12}],
       "Lunch":[{hour:12, minute:12},{hour:12, minute:52}],
-      "p4":[{hour:12, minute:52}, {hour:12, minute:56}],
+      "p5":[{hour:12, minute:52}, {hour:12, minute:56}],
       "5":[{hour:12, minute:56},{hour:13, minute:54}],
-      "p2":[{hour:13, minute:54}, {hour:13, minute:57}],
+      "p6":[{hour:13, minute:54}, {hour:13, minute:57}],
       "6":[{hour:13, minute:57},{hour:14, minute:55}]
     },
     days:{
@@ -94,10 +94,21 @@ function getScheduleToday(now){
               period:getPeriodInfo(period)
           }
         }
-        for(var period = 1;period <= 8; period++){
+        for(period in periods){
+          if (!periods.hasOwnProperty(period)) continue;
           if(!dropped.includes(parseInt(period))){
             push(session, period)
             session++
+          }
+        }
+        for(sess in schedule.schedule.sessions){
+          if(parseInt(schedule.schedule.sessions[sess]) == NaN){
+            console.log(sess)
+            // is it the period before a dropped period
+            for(i in dropped){
+              if(parseFloat(sess) == dropped[i]) break;
+            }
+            push(sess, sess=="Break"||sess=="Lunch"?sess:"Passing Period")
           }
         }
         push("Break", "Break")
@@ -166,12 +177,6 @@ function isSchool(now){
   var end = now.set({hour:14, minute:55})
   if(now <= start) return [false, "Before School"];
   if(now >= end) return [false, "After School"];
-
-  //is it passing period?
-  var period = getPeriod(now)
-  if(!period || period == null){
-    return [false, "Passing Period"]
-  }
 
   return [true, "Yup"];
 }
