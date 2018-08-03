@@ -77,7 +77,7 @@ function randomDate(now){
 }
 
 $(document).ready(function(){
-  now = DateTime.local()//randomDate()
+  now = /*DateTime.local()*/randomDate()
   console.log(now.toISO())
   init(now)
   setInterval(240000, function(){init()})
