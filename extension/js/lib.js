@@ -86,18 +86,18 @@ function getScheduleToday(now){
         var session = 1;
         var dropped = dayObject.dropped
         var sessions = schedule.schedule.sessions
-        var push = function(session, period){
+        var push = function(session, period, shouldGetInfo){
           scheduleOutput[session] = {
               start: timeToday(sessions[session][0], now),
               end: timeToday(sessions[session][1], now),
               interval:Interval.fromDateTimes(timeToday(sessions[session][0], now), timeToday(sessions[session][1], now)),
-              period:getPeriodInfo(period)
+              period:shouldGetInfo?getPeriodInfo(period):{period:period}
           }
         }
         for(period in periods){
           if (!periods.hasOwnProperty(period)) continue;
           if(!dropped.includes(parseInt(period))){
-            push(session, period)
+            push(session, period, true)
             session++
           }
         }
@@ -108,7 +108,7 @@ function getScheduleToday(now){
             for(i in dropped){
               if(parseFloat(sess) == dropped[i]) break;
             }
-            push(sess, sess=="Break"||sess=="Lunch"?sess:"Passing Period")
+            push(sess, sess=="Break"||sess=="Lunch"?sess:"Passing Period", false)
           }
         }
         push("Break", "Break")

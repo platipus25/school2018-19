@@ -20,5 +20,6 @@ function getPeriodInfo(period){
   var thisPeriodInfo = periods[period]
   if(!thisPeriodInfo) thisPeriodInfo = {}
   thisPeriodInfo.period = period
+  console.log(period, thisPeriodInfo)
   return thisPeriodInfo
 }
