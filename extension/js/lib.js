@@ -1,5 +1,6 @@
 var DateTime = luxon.DateTime;
 var Interval = luxon.Interval;
+var todaysSchedule = null;
 
 var schedule = {
   schedule:{
@@ -78,6 +79,7 @@ function timeToday(object, now){
 
 function getScheduleToday(now){
     if(!now) now = DateTime.local()
+    if(todaysSchedule != null && todaysSchedule) return todaysSchedule
     var day = now.weekdayShort
     if(day == "Sat" || day == "Sun") return null
     var dayObject = schedule.schedule.days[day]
@@ -125,6 +127,7 @@ function getScheduleToday(now){
             }
         }
     }
+    todaysSchedule = scheduleOutput
     return scheduleOutput
 }
 
