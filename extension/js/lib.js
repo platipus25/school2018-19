@@ -104,7 +104,7 @@ function getScheduleToday(now){
           }
         }
         for(sess in schedule.schedule.sessions){
-          if(parseInt(schedule.schedule.sessions[sess]) == NaN){
+          if(isNaN(parseInt(sess))){
             console.log(sess)
             // is it the period before a dropped period
             for(i in dropped){
