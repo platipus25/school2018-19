@@ -1,91 +1,115 @@
 <html>
   <head>
     <style>
+      /* TODO: unhide dates */
+      #dayOff{
+        display:none;
+      }
       body{
-        font-family:monospace;
-        font-size:5vw;
+        font-family:Arial, Helvetica, sans-serif;
+        font-size:20px;
+        width:450px;
         /*width:400px;
         height:210px;*/
+        background-color:#1e5799;
+        color:#ffcc00;
       }
-      @media only screen and (max-width: 600px) {
-        body {
-          width:400px;
-          /*height:210px;*/
-          /*background-color: lightblue;*/
-        }
+      .field{
+        color:white;
+      }
+      .value{
+        color:wheat;
+        position:absolute;
+        left:115px;
+        text-align: right;
+      }
+      strong{
+        font-size:25px;
+      }
+      .nowrap{
+        position:relative !important;
+        left:0;
+      }
+      #optionsLink{
+        color:white;
       }
 
-      .overlay{
-        position:fixed;
-        display:none;
-        width:100%;
-        height:100%;
-        background-color:#ffffffdf;
-        z-index:2;
 
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-      }
-      .overlayText{
+      #noschool{
         position: absolute;
         top: 50%;
         left: 50%;
-        font-size: 50px;
-        color: black;
-        transform: translate(-50%,-50%);
+        font-size: 60px;
+        text-align: center;
+        color:#ffcc00;
+        transform: translate(-50%,-50%) rotateZ(-25deg);
+        background-color:#00000022;
+        border-radius:2vw;
+        border:#f0c000 solid 3px;
+        padding-left:4px;
+        padding-right:4px;
+        font-weight:bold;
+        z-index:2;
       }
-      .footer{
-        bottom:0;
-        position:relative;
-        left:25%;
-        width:25%;
-        font-size:4vw;
-      }
-      .label{
-        text-align: right;
-        left:65vw;
-        /*right:2vw;*/
-        position:absolute;
-      }
-      #periodInfo{
-        font-size: 8vw;
-      }
+        */
     </style>
     <meta name="viewport" content="width=400, initial-scale=1.0">
   </head>
   <body>
-    <div>Now: <span id="nowDate"></span> <span id="nowTime"></span></div>
-    <div id="periods">
-      <span id="endOfPeriodCountdown" class="countdown">0 minutes</span>
-      <br>
-      Left of <strong id="periodInfo">school</strong>
-      <br>
+    <!--
+    <table>
+      <tr>
+        <th>When</th>
+        <th>Period</th>
+        <th>Teacher</th>
+        <th>Subject</th>
+        <th>Room</th>
+      </tr>
+      <tr>
+        <th>Now</th>
+        <td><span class="thisPeriod" id="thisperiod">__</span></td>
+        <td><span class="thisPeriod" id="thisteacher">__</span></td>
+        <td><span class="thisPeriod" id="thissubject">__</span></td>
+        <td><span class="thisPeriod" id="thisroom">__</span></td>
+      </tr>
+      <tr>
+        <th>Next</th>
+        <td><span class="nextPeriod" id="nextperiod">__</span></td>
+        <td><span class="nextPeriod" id="nextteacher">__</span></td>
+        <td><span class="nextPeriod" id="nextsubject">__</span></td>
+        <td><span class="nextPeriod" id="nextroom">__</span></td>
+      </tr>
+    </table>
+    <br />-->
+    <div>
+      <strong>Now:</strong>
+      <span class="value nowrap"><span id="nowDate"></span> <span id="nowTime"></span></span>
+      <br />
+       <span id="thisPeriod" class="field">School</span>:  <span class="value nowrap"> <span id="endOfPeriodCountdown">0 minutes</span> left</span>
       <br>
       <strong>Next:</strong>
       <br>
-      <span class="nextPeriod" id="period">__</span> <span class="label">Period</span>
-      <br>
-      <span class="nextPeriod" id="teacher">__</span> <span class="label">Teacher</span>
-      <br>
-      <span class="nextPeriod" id="subject">__</span> <span class="label">Subject</span>
-      <br>
-      <span class="nextPeriod" id="room">__</span> <span class="label">Room</span>
-      <br>
-      <span class="nextPeriod" id="time">__</span> <span class="label">Start Time</span>
-    </div>
-    <br>
-    <div id="dayOff">
-      <span id="dayOffCountdown" class="countdown"></span> untill <span id="nameOfBreak"></span>
-      <br>
+      <span class="field">Period</span>:  <span class="nextPeriod value" id="period">__</span>
+      <br />
+      <span class="field">Teacher</span>:  <span class="nextPeriod value" id="teacher">__</span>
+      <br />
+      <span class="field">Subject</span>:  <span class="nextPeriod value" id="subject">__</span>
+      <br />
+      <span class="field">Room</span>:  <span class="nextPeriod value" id="room">__</span>
+      <br />
+      <span class="field">Start Time</span>:  <span class="nextPeriod value" id="time">__</span>
+      <br />
+      <!--<span id="nameOfBreak" class="field"></span>:  <span id="dayOffCountdown" class="value nowrap"></span>-->
+      <div id="noschool"></div>
     </div>
 
+<!--
     <div id="noschoolOverlay" class="overlay">
       <span id="reason" class="overlayText">loading...</span>
     </div>
+  -->
 
-    <a class="footer" href="#" id="optionsLink">Add info about your classes</a>
+    <a href="#" id="optionsLink">Add info about your classes</a>
 
     <script src="js/luxon.min.js"></script>
     <script src="js/countdown.min.js"></script>
