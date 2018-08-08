@@ -190,7 +190,7 @@ function getNextDayOff(now){
   var max = schedule.days_off.length-1;
   var half;
   for(i in schedule.days_off){
-    half = Math.floor((max+min)/2)
+    half = Math.round((max+min)/2) //floor
     console.log("min", min, "max", max, "half", half, "half pointing to", schedule.days_off[half].name)
     if(now > schedule.days_off[half].dates[0]){
       if(min == half) break
@@ -198,9 +198,13 @@ function getNextDayOff(now){
     }else if(now < schedule.days_off[half].dates[0]){
       if(max == half) break
       max = half;
-    }else if(now.toLocaleString() == schedule.days_off[half].dates[0].toLocaleString()){
-      return [half, schedule.days_off[half], "today"]
-    }
+    }else{
+      for(date in schedule.days_off[half].dates){
+        if(now.toLocaleString() == schedule.days_off[half].dates[date].toLocaleString()){
+          return [half, schedule.days_off[half], "today"]
+        }
+      }
+    } 
   }
   return [half, schedule.days_off[half], "next"]
 }
