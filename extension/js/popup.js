@@ -1,68 +1,73 @@
 function init(now){
-  var nowText = now;
-  if(!now){
-    now = DateTime.local()
-    var nowText = now
-    setInterval(60000, function(){
-      $("#nowTime").text(nowText.toLocaleString(DateTime.TIME_SIMPLE))
-    })
-  }
-  $("#nowDate").text(nowText.weekdayShort+" "+nowText.toLocaleString(DateTime.DATE_SMALL))
-  $("#nowTime").text(nowText.toLocaleString(DateTime.TIME_SIMPLE))
-  $("#noschoolOverlay").hide()
+  todaysSchedule = null
+  var periodCountdownId
+  var dayOffCountdownId
+  var timeOfDayId = window.timeOfDayId
+
+  if(!now) now = DateTime.local()
+  window.now = now;
+  $("#nowDate").text(now.weekdayShort+" "+now.toLocaleString(DateTime.DATE_SMALL))
+  $("#nowTime").text(now.toLocaleString(DateTime.TIME_SIMPLE))
+  if(timeOfDayId) clearInterval(timeOfDayId)
+  window.timeOfDayId = setInterval(function(){
+    $("#nowTime").text(now.toLocaleString(DateTime.TIME_SIMPLE))
+  }, 1000)
 
   // check if isSchool
   var schoolInSession = isSchool(now);
   if(schoolInSession[0] == false){
     $("#noschoolOverlay").show()
     $("#reason").text(schoolInSession[1])
+  }else{
+    $("#noschoolOverlay").hide()
   }
 
 
   // get Period
-  var thisPeriod = getPeriod(now)
-  var nextPeriod = getNextPeriod(now)
+  thisPeriod = getPeriod(now)
+  nextPeriod = getNextPeriod(now)
   if(thisPeriod){
-    var periodCountdown = countdown(function(ts){
-      $('#endOfPeriodCountdown').html(ts.toHTML());
-    }, thisPeriod.end.toJSDate(), countdown.HOURS| countdown.MINUTES)
-    console.log(thisPeriod)
+    function periodCountdown(end){
+      var now = window.now
+      var ts = countdown(now.toJSDate(), end.toJSDate(), countdown.HOURS| countdown.MINUTES)
+      if(ts.value > 1) $('#endOfPeriodCountdown').html(ts.toHTML());
+    }
+
+    if(periodCountdownId) clearInterval(periodCountdownId)
+    periodCountdown(thisPeriod.end)
+    periodCountdownId = setInterval(periodCountdown, 30000, thisPeriod.end)
+
     var periodName = thisPeriod.period.period
+    if(thisPeriod.period.subject) periodName = thisPeriod.period.subject
+    if(!isNaN(parseInt(periodName))) periodName = "period "+periodName
     console.log(periodName)
-    $("#periodInfo").text(periodName != "Break" && periodName != "Lunch" && periodName != "Passing Period"?"period "+periodName:periodName)
+    $("#periodInfo").text(periodName)
   }
-  setNextPeriod(nextPeriod)
+
+  if(!nextPeriod){
+    $(".nextPeriod").text("__")
+  }else{
+    console.log(nextPeriod)
+    for(field in nextPeriod.period){
+      $("#"+field).text(nextPeriod.period[field])
+    }
+    $("#time").text(nextPeriod.start.toLocaleString(DateTime.TIME_SIMPLE))
+  }
 
 
   nextDayOff = getNextDayOff(now)
-  var dayOffCountdown = countdown(function(ts){
-    $('#dayOffCountdown').html(ts.toHTML());
-  }, nextDayOff[1].dates[0]/*.toJSDate()*/, countdown.MONTHS|countdown.DAYS|countdown.HOURS)
-  $("#nameOfBreak").text(recessToText(nextDayOff[1]))
 
-  function setNextPeriod(period){
-    if(!period) return null
-    console.log(period)
-    $("#period").text(period.period.period)
-    $("#teacher").text(period.period.teacher)
-    $("#subject").text(period.period.subject)
-    $("#room").text(period.period.room)
-    $("#time").text(period.start.toLocaleString(DateTime.TIME_SIMPLE))
+  function dayOffCountdown(end){
+    var now = window.now
+    var ts = countdown(now.toJSDate(), end.toJSDate(), countdown.MONTHS|countdown.DAYS|countdown.HOURS)
+    console.log("dayOffCountdown", ts)
+    if(ts.value) $('#dayOffCountdown').html(ts.toHTML());
   }
-  function periodToText(periodObject, amount){
-    var object = periodObject.period
-    if(object.period == "Break" || object.period == "Lunch") return object.period
-    if(amount == "less") return "period "+object.period+" ";
-    for(i in object){
-      if(object[i] == false) object[i] = "____"
-    }
-    var text = " period "+object.period+" with "+object.teacher+" teaching "+object.subject+" in room "+object.room+" at "+periodObject.start.toLocaleString(DateTime.TIME_SIMPLE)
-    return text
-  }
-  function recessToText(object){
-    var text = object.name/*+": "+object.dates[0].toLocaleString(DateTime.DATE_HUGE)*/
-    return text
-  }
+
+  if(dayOffCountdownId) clearInterval(dayOffCountdownId)
+  dayOffCountdown(nextDayOff[1].dates[0])
+  dayOffCountdownId = setInterval(dayOffCountdown, 2*(60*1000)/*30 minutes */, nextDayOff[1].dates[0])
+  $("#nameOfBreak").text(nextDayOff[1].name)
 
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
 }
@@ -71,7 +76,7 @@ function randomDate(now){
   var random = function(min = 0, max = 1){
     return Math.round(Math.random() * (max - min) ) + min;
   }
-  var returnDate = DateTime.local(random(0, 1)?2018:2019, random(0, 12), random(0, 31), random(0, 24), random(0, 59))
+  var returnDate = DateTime.local(random(0, 1)?2018:2019, random(0, 12), random(0, 31), random(7, 14) /*random(0, 24)*/, random(0, 59))
   if(returnDate.isValid && returnDate > DateTime.local()) return returnDate
   return randomDate()
 }
@@ -80,7 +85,7 @@ $(document).ready(function(){
   now = /*DateTime.local()*/randomDate()
   console.log(now.toISO())
   init(now)
-  setInterval(240000, function(){init()})
+  //setInterval(function(){init()}, 60000)
 });
 
 //setTimeout(60000, function(){window.close()});
