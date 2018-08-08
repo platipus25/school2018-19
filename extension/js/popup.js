@@ -16,10 +16,10 @@ function init(now){
   // check if isSchool
   var schoolInSession = isSchool(now);
   if(schoolInSession[0] == false){
-    $("#noschoolOverlay").show()
-    $("#reason").text(schoolInSession[1])
+    $("#noschool").show()
+    $("#noschool").text(schoolInSession[1])
   }else{
-    $("#noschoolOverlay").hide()
+    $("#noschool").hide()
   }
 
 
@@ -39,9 +39,9 @@ function init(now){
 
     var periodName = thisPeriod.period.period
     if(thisPeriod.period.subject) periodName = thisPeriod.period.subject
-    if(!isNaN(parseInt(periodName))) periodName = "period "+periodName
+    if(!isNaN(parseInt(periodName))) periodName = "Period "+periodName
     console.log(periodName)
-    $("#periodInfo").text(periodName)
+    $("#thisPeriod").text(periodName)
   }
 
   if(!nextPeriod){
@@ -82,7 +82,7 @@ function randomDate(now){
 }
 
 $(document).ready(function(){
-  now = /*DateTime.local()*/randomDate()
+  now = DateTime.local()//randomDate()
   console.log(now.toISO())
   init(now)
   //setInterval(function(){init()}, 60000)
