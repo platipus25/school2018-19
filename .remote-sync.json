@@ -1,0 +1,21 @@
+{
+  "logger": {
+    "title": "Remote Sync"
+  },
+  "transport": "ftp",
+  "uploadOnSave": true,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "ftp.platipus25.com",
+  "port": "21",
+  "target": "/public_html/school2018-19",
+  "ignore": [
+    ".remote-sync.json",
+    ".git/**"
+  ],
+  "username": "platipus",
+  "password": "ravago702",
+  "watch": [
+    "/extension/"
+  ]
+}
