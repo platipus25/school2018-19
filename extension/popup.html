@@ -38,7 +38,8 @@
       #noschool{
         position: absolute;
         top: 50%;
-        left: 50%;
+        left:50%;
+        margin:auto;
         font-size: 60px;
         text-align: center;
         color:#ffcc00;
@@ -51,37 +52,13 @@
         font-weight:bold;
         z-index:2;
       }
-        */
+
     </style>
     <meta name="viewport" content="width=400, initial-scale=1.0">
   </head>
   <body>
-    <!--
-    <table>
-      <tr>
-        <th>When</th>
-        <th>Period</th>
-        <th>Teacher</th>
-        <th>Subject</th>
-        <th>Room</th>
-      </tr>
-      <tr>
-        <th>Now</th>
-        <td><span class="thisPeriod" id="thisperiod">__</span></td>
-        <td><span class="thisPeriod" id="thisteacher">__</span></td>
-        <td><span class="thisPeriod" id="thissubject">__</span></td>
-        <td><span class="thisPeriod" id="thisroom">__</span></td>
-      </tr>
-      <tr>
-        <th>Next</th>
-        <td><span class="nextPeriod" id="nextperiod">__</span></td>
-        <td><span class="nextPeriod" id="nextteacher">__</span></td>
-        <td><span class="nextPeriod" id="nextsubject">__</span></td>
-        <td><span class="nextPeriod" id="nextroom">__</span></td>
-      </tr>
-    </table>
-    <br />-->
     <div>
+      <div id="noschool"></div>
       <strong>Now:</strong>
       <span class="value nowrap"><span id="nowDate"></span> <span id="nowTime"></span></span>
       <br />
@@ -100,7 +77,6 @@
       <span class="field">Start Time</span>:  <span class="nextPeriod value" id="time">__</span>
       <br />
       <!--<span id="nameOfBreak" class="field"></span>:  <span id="dayOffCountdown" class="value nowrap"></span>-->
-      <div id="noschool"></div>
     </div>
 
 <!--
