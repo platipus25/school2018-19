@@ -170,8 +170,8 @@ function isSchool(now){
 
   // is it a holiday or recess
   var nextDayOff = getNextDayOff(now)
-  if(nextDayOff[2] == "today"){
-    return [false, nextDayOff[1].name];
+  if(nextDayOff[1] == "now"){
+    return [false, nextDayOff[0].name];
   }
 
   // is it before or after school
@@ -186,25 +186,14 @@ function isSchool(now){
 
 function getNextDayOff(now){
   if(!now) now = DateTime.local();
-  var min = 0;
-  var max = schedule.days_off.length-1;
-  var half;
-  for(i in schedule.days_off){
-    half = Math.round((max+min)/2) //floor
-    console.log("min", min, "max", max, "half", half, "half pointing to", schedule.days_off[half].name)
-    if(now > schedule.days_off[half].dates[0]){
-      if(min == half) break
-      min = half;
-    }else if(now < schedule.days_off[half].dates[0]){
-      if(max == half) break
-      max = half;
-    }else{
-      for(date in schedule.days_off[half].dates){
-        if(now.toLocaleString() == schedule.days_off[half].dates[date].toLocaleString()){
-          return [half, schedule.days_off[half], "today"]
+  for(let {name, dates} of schedule.days_off){
+    if(dates[0] >= now){
+      for(date of dates){
+        if(date.toISODate() == now.toISODate()){
+          return [{name:name, dates:dates}, "now"]
         }
       }
-    } 
+      return [{name:name, dates:dates}, "next"]
+    }
   }
-  return [half, schedule.days_off[half], "next"]
 }
