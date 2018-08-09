@@ -65,9 +65,9 @@ function init(now){
   }
 
   if(dayOffCountdownId) clearInterval(dayOffCountdownId)
-  dayOffCountdown(nextDayOff[1].dates[0])
-  dayOffCountdownId = setInterval(dayOffCountdown, 2*(60*1000)/*30 minutes */, nextDayOff[1].dates[0])
-  $("#nameOfBreak").text(nextDayOff[1].name)
+  dayOffCountdown(nextDayOff[0].dates[0])
+  dayOffCountdownId = setInterval(dayOffCountdown, 2*(60*1000)/*30 minutes */, nextDayOff[0].dates[0])
+  $("#nameOfBreak").text(nextDayOff[0].name)
 
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
 }
