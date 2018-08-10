@@ -8,7 +8,7 @@
       body{
         font-family:Arial, Helvetica, sans-serif;
         font-size:20px;
-        width:400px;
+        min-width:300px;
         width:fit-content;
         /*width:400px;
         height:210px;*/
@@ -19,11 +19,15 @@
       .field{
         color:white;
       }
+      .field.static{
+        display:inline-block;
+        width:100px;
+        /*float: left;*/
+      }
       .value{
         color:wheat;
-        position:absolute;
-        left:115px;
-        text-align: right;
+        position:relative !important;
+        left:0;
       }
       strong{
         font-size:25px;
@@ -56,6 +60,9 @@
       #container{
         width:fit-content;
       }
+      .yellow{
+        color:#ffcc00;
+      }
 
     </style>
     <meta name="viewport" content="width=400, initial-scale=1.0">
@@ -70,15 +77,15 @@
       <br>
       <strong>Next:</strong>
       <br>
-      <span class="field">Period</span>:  <span class="nextPeriod value" id="period">__</span>
+      <span class="field static">Period<span class="yellow">:</span></span>  <span class="nextPeriod value" id="period">__</span>
       <br />
-      <span class="field">Teacher</span>:  <span class="nextPeriod value" id="teacher">__</span>
+      <span class="field static">Teacher<span class="yellow">:</span></span>  <span class="nextPeriod value" id="teacher">__</span>
       <br />
-      <span class="field">Subject</span>:  <span class="nextPeriod value" id="subject">__</span>
+      <span class="field static">Subject<span class="yellow">:</span></span>  <span class="nextPeriod value" id="subject">__</span>
       <br />
-      <span class="field">Room</span>:  <span class="nextPeriod value" id="room">__</span>
+      <span class="field static">Room<span class="yellow">:</span></span>  <span class="nextPeriod value" id="room">__</span>
       <br />
-      <span class="field">Start Time</span>:  <span class="nextPeriod value" id="time">__</span>
+      <span class="field static">Start Time<span class="yellow">:</span></span> <span class="nextPeriod value" id="time">__</span>
       <br />
       <span id="nameOfBreak" class="field"></span>:  <span id="dayOffCountdown" class="value nowrap"></span>
     </div>
