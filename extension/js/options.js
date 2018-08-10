@@ -3,17 +3,17 @@
 function get(period){
   var DOMNodes = $("."+period)
   return {
-    subject:inputs.filter(".subject").val(),
-    teacher:inputs.filter(".teacher").val(),
-    room:inputs.filter(".room").val()
+    subject:DOMNodes.filter(".subject").val(),
+    teacher:DOMNodes.filter(".teacher").val(),
+    room:DOMNodes.filter(".room").val()
   }
 }
 
 function set(period, periodObj){
   var DOMNodes = $("."+period)
-  inputs.filter(".subject").val(periodObj.subject)
-  inputs.filter(".teacher").val(periodObj.teacher)
-  inputs.filter(".room").val(periodObj.room)
+  DOMNodes.filter(".subject").val(periodObj.subject)
+  DOMNodes.filter(".teacher").val(periodObj.teacher)
+  DOMNodes.filter(".room").val(periodObj.room)
 }
 
 function getPeriodOptions(period){
@@ -58,12 +58,11 @@ function restore_options() {
     object[period] = get(period)
   }
 
-  // Use default value color = 'red' and likesColor = true.
   chrome.storage.sync.get(object, function(items) {
     for(i in items){
-      setPeriodOptions(items[i], i)
+      set(i, items[i])
     }
   });
 }
-document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('submit').addEventListener('click', save_options);
+$(document).ready(restore_options);
+$('submit').click(save_options);
