@@ -187,8 +187,9 @@ function isSchool(now){
 function getNextDayOff(now){
   if(!now) now = DateTime.local();
   for(let {name, dates} of schedule.days_off){
-    if(dates[0] >= now){
+    if(dates[0].toISODate() >= now.toISODate()){
       for(date of dates){
+        console.log(date.toISODate())
         if(date.toISODate() == now.toISODate()){
           return [{name:name, dates:dates}, "now"]
         }
