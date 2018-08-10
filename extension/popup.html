@@ -14,7 +14,7 @@
         height:210px;*/
         background-color:#1e5799;
         color:#ffcc00;
-        white-space: nowrap;
+        white-space:nowrap;
       }
       .field{
         color:white;
@@ -22,19 +22,12 @@
       .field.static{
         display:inline-block;
         width:100px;
-        /*float: left;*/
       }
       .value{
         color:wheat;
-        position:relative !important;
-        left:0;
       }
       strong{
         font-size:25px;
-      }
-      .nowrap{
-        position:relative !important;
-        left:0;
       }
       #optionsLink{
         color:white;
@@ -44,9 +37,7 @@
         position: absolute;
         top: 50%;
         left:50%;
-        margin:auto;
         font-size: 60px;
-        text-align: center;
         color:#ffcc00;
         transform: translate(-50%,-50%) rotateZ(-25deg);
         background-color:#00000022;
@@ -71,9 +62,9 @@
     <div id="container">
       <div id="noschool"></div>
       <strong>Now:</strong>
-      <span class="value nowrap"><span id="nowDate"></span> <span id="nowTime"></span></span>
+      <span class="value"><span id="nowDate"></span> <span id="nowTime"></span></span>
       <br />
-       <span id="thisPeriod" class="field">School</span>:  <span class="value nowrap"> <span id="endOfPeriodCountdown">0 minutes</span> left</span>
+       <span id="thisPeriod" class="field">School</span>:  <span class="value"> <span id="endOfPeriodCountdown">0 minutes</span> left</span>
       <br>
       <strong>Next:</strong>
       <br>
@@ -87,7 +78,7 @@
       <br />
       <span class="field static">Start Time<span class="yellow">:</span></span> <span class="nextPeriod value" id="time">__</span>
       <br />
-      <span id="nameOfBreak" class="field"></span>:  <span id="dayOffCountdown" class="value nowrap"></span>
+      <span id="nameOfBreak" class="field"></span>:  <span id="dayOffCountdown" class="value"></span>
     </div>
 
     <a href="#" id="optionsLink">Add info about your classes</a>
