@@ -82,9 +82,13 @@ function randomDate(now){
 }
 
 $(document).ready(function(){
+  console.group()
+  console.time("init")
   now = DateTime.local()//randomDate()
   console.log(now.toISO())
   init(now)
+  console.timeEnd("init")
+  console.groupEnd()
   //setInterval(function(){init()}, 60000)
 });
 
