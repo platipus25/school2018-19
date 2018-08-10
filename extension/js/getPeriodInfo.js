@@ -9,7 +9,7 @@ var periods = {
   8:{},
 }
 if(chrome){
-  chrome.storage.sync.get(["1","2","3","4","5","6","7","8"], function(items){
+  chrome.storage.sync.get(periods, function(items){
     periods = items
   });
 }

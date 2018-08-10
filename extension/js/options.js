@@ -1,5 +1,21 @@
-// Saves options to chrome.storage
-var numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight"]
+// Saves options to chrome.storage.sync
+
+function get(period){
+  var DOMNodes = $("."+period)
+  return {
+    subject:inputs.filter(".subject").val(),
+    teacher:inputs.filter(".teacher").val(),
+    room:inputs.filter(".room").val()
+  }
+}
+
+function set(period, periodObj){
+  var DOMNodes = $("."+period)
+  inputs.filter(".subject").val(periodObj.subject)
+  inputs.filter(".teacher").val(periodObj.teacher)
+  inputs.filter(".room").val(periodObj.room)
+}
+
 function getPeriodOptions(period){
   var inputs = $("."+numbers[period])
   var outobj = {
@@ -18,16 +34,17 @@ function setPeriodOptions(periodObj, index){
 
 function save_options() {
   var object = {}
-  for(var i = 1; i<=8; i++){
-    object[parseInt(i)] = getPeriodOptions(parseInt(i))
+  for(let period = 1; period<=8; period++){
+    period = parseInt(period)
+    object[period] = get(period)
   }
   console.log(object)
   chrome.storage.sync.set(object, function() {
     // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
+    var status = $('#status');
+    status.text('Options saved.');
     setTimeout(function() {
-      status.textContent = '';
+      status.text('');
     }, 750);
   });
 }
@@ -36,8 +53,9 @@ function save_options() {
 // stored in chrome.storage.
 function restore_options() {
   var object = {}
-  for(var i = 1; i<=8; i++){
-    object[parseInt(i)] = getPeriodOptions(parseInt(i))
+  for(let period = 1; period<=8; period++){
+    period = parseInt(period)
+    object[period] = get(period)
   }
 
   // Use default value color = 'red' and likesColor = true.
