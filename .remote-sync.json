@@ -10,8 +10,7 @@
   "port": "21",
   "target": "/public_html/school2018-19",
   "ignore": [
-    ".remote-sync.json",
-    ".git/**"
+    ".remote-sync.json .git/**"
   ],
   "username": "platipus",
   "password": "ravago702",
