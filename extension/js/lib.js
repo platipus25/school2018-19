@@ -110,21 +110,27 @@ function getScheduleToday(now){
             for(i in dropped){
               if(parseFloat(sess) == dropped[i]) break;
             }
-            push(sess, sess=="Break"||sess=="Lunch"?sess:"Passing Period", false)
+            let TempSess = sess;
+            if(sess[0] == "p") TempSess = "Passing Period"
+            push(sess, TempSess, false)
           }
         }
-        push("Break", "Break")
-        push("Lunch", "Lunch")
     }else if(day == "Mon"){
         for(period in dayObject.periods){
-            // get period info
 
             scheduleOutput[period] = {
                 start:timeToday(dayObject.periods[period][0], now),
                 end:timeToday(dayObject.periods[period][1], now),
-                interval:Interval.fromDateTimes(timeToday(dayObject.periods[period][0], now), timeToday(dayObject.periods[period][1], now)),
-                period:getPeriodInfo(period)
+                interval:Interval.fromDateTimes(timeToday(dayObject.periods[period][0], now), timeToday(dayObject.periods[period][1], now))
             }
+            let periodField = period;
+            if(period[0] == "p") periodField = "Passing Period"
+            if(isNaN(parseInt(periodField))){
+              periodField = {period:periodField}
+            }else{
+              periodField = getPeriodInfo(periodField)
+            }
+            scheduleOutput[period].period = periodField
         }
     }
     todaysSchedule = scheduleOutput
