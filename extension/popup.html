@@ -35,11 +35,11 @@
 
       #noschool{
         position: absolute;
-        top: 50%;
-        left:50%;
+        /*top: 50%;
+        left:50%;*/
         font-size: 60px;
         color:#ffcc00;
-        transform: translate(-50%,-50%) rotateZ(-25deg);
+        transform: /*translate(-50%,-50%)*/ translate(0%, 100%) rotateZ(-25deg);
         background-color:#00000022;
         border-radius:2vw;
         border:#f0c000 solid 3px;
@@ -48,11 +48,35 @@
         font-weight:bold;
         z-index:2;
       }
+      @media (max-width:450px) and (hover){
+        #noschool{
+          top: 50%;
+          left:50%;
+          transform: translate(-50%,-50%) rotateZ(-25deg);
+        }
+      }
       #container{
         width:fit-content;
       }
       .yellow{
         color:#ffcc00;
+      }
+
+      @media (min-width:500px){
+        #noschool{
+          font-size:12vw;
+          border-width:0.5vw;
+        }
+        strong{
+          font-size:5vw;
+        }
+        body{
+          font-size:4vw;
+        }
+        .field.static{
+          width:20vw;
+        }
+
       }
 
     </style>
