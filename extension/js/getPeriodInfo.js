@@ -1,4 +1,4 @@
-var periods = {
+periods = {
   1:{},
   2:{},
   3:{},
@@ -8,11 +8,17 @@ var periods = {
   7:{},
   8:{},
 }
-if(chrome){
+if(store) var tempPeriods = store.get("periodInfo")
+if(tempPeriods){
+  periods = tempPeriods
+}
+if(chrome.storage){
   chrome.storage.sync.get(periods, function(items){
     periods = items
   });
 }
+
+
 
 function getPeriodInfo(period){
   //if(period == "Break" || period == "Lunch") return {period:period}

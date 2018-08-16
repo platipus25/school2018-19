@@ -39,14 +39,18 @@ function save_options() {
     object[period] = get(period)
   }
   console.log(object)
-  chrome.storage.sync.set(object, function() {
-    // Update status to let user know options were saved.
-    var status = $('#status');
-    status.text('Options saved.');
-    setTimeout(function() {
-      status.text('');
-    }, 750);
-  });
+  if(chrome.storage){
+    chrome.storage.sync.set(object, function() {
+      // Update status to let user know options were saved.
+      var status = $('#status');
+      status.text('Options saved.');
+      setTimeout(function() {
+        status.text('');
+      }, 750);
+    });
+  }
+  store.set("periodInfo", object)
+  console.log(object)
 }
 
 // Restores select box and checkbox state using the preferences
@@ -57,12 +61,19 @@ function restore_options() {
     period = parseInt(period)
     object[period] = get(period)
   }
-
-  chrome.storage.sync.get(object, function(items) {
-    for(i in items){
-      set(i, items[i])
-    }
-  });
+  var tempPeriods = object;
+  if(chrome.storage){
+    chrome.storage.sync.get(object, function(items) {
+      tempPeriods = items
+    });
+  }
+  var tempTempPeriods = store.get("periodInfo")
+  if(tempTempPeriods){
+    tempPeriods = tempTempPeriods;
+  }
+  for(i in tempPeriods){
+    set(i, tempPeriods[i])
+  }
 }
 $(document).ready(restore_options);
-$('submit').click(save_options);
+$('#submit').click(save_options);
