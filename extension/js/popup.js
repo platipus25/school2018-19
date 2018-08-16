@@ -89,7 +89,7 @@ $(document).ready(function(){
   init(now)
   console.timeEnd("init")
   console.groupEnd()
-  //setInterval(function(){init()}, 60000)
+  setInterval(function(){init()}, 60000)
 });
 
 //setTimeout(60000, function(){window.close()});
