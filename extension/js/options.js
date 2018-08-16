@@ -1,47 +1,42 @@
-// Saves options to chrome.storage.sync
-
-function get(period){
-  var DOMNodes = $("."+period)
-  return {
-    subject:DOMNodes.filter(".subject").val(),
-    teacher:DOMNodes.filter(".teacher").val(),
-    room:DOMNodes.filter(".room").val()
+var periods = {
+  1:{},
+  2:{},
+  3:{},
+  4:{},
+  5:{},
+  6:{},
+  7:{},
+  8:{},
+}
+var fields = ["subject", "teacher", "room"]
+for(period in periods){
+  for(field of fields){
+    periods[period][field] = ""
   }
 }
 
-function set(period, periodObj){
-  var DOMNodes = $("."+period)
-  DOMNodes.filter(".subject").val(periodObj.subject)
-  DOMNodes.filter(".teacher").val(periodObj.teacher)
-  DOMNodes.filter(".room").val(periodObj.room)
+function get(){
+  for(period in periods){
+    var DOMNodes = $("."+period)
+    for(field in periods[period]){
+      periods[period][field] = DOMNodes.filter("."+field).val()
+    }
+  }
 }
 
-function getPeriodOptions(period){
-  var inputs = $("."+numbers[period])
-  var outobj = {
-    subject:inputs.filter(".subject").val(),
-    teacher:inputs.filter(".teacher").val(),
-    room:inputs.filter(".room").val()
+function set(periodsToSet){
+  for(period in periodsToSet){
+    var DOMNodes = $("."+period)
+    for(field in periodsToSet[period]){
+        DOMNodes.filter("."+field).val(periodsToSet[period][field])
+    }
   }
-  return outobj
-}
-function setPeriodOptions(periodObj, index){
-  var inputs = $("."+numbers[index])
-  inputs.filter(".subject").val(periodObj.subject)
-  inputs.filter(".teacher").val(periodObj.teacher)
-  inputs.filter(".room").val(periodObj.room)
 }
 
-function save_options() {
-  var object = {}
-  for(let period = 1; period<=8; period++){
-    period = parseInt(period)
-    object[period] = get(period)
-  }
-  console.log(object)
+function save(){
+  get()
   if(chrome.storage){
-    chrome.storage.sync.set(object, function() {
-      // Update status to let user know options were saved.
+    chrome.storage.sync.set(periods, function() {
       var status = $('#status');
       status.text('Options saved.');
       setTimeout(function() {
@@ -49,31 +44,23 @@ function save_options() {
       }, 750);
     });
   }
-  store.set("periodInfo", object)
-  console.log(object)
+  if(store){
+    store.set("periodInfo", periods)
+  }
 }
 
-// Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
-function restore_options() {
-  var object = {}
-  for(let period = 1; period<=8; period++){
-    period = parseInt(period)
-    object[period] = get(period)
-  }
-  var tempPeriods = object;
+function restore(){
   if(chrome.storage){
-    chrome.storage.sync.get(object, function(items) {
-      tempPeriods = items
+    chrome.storage.sync.get(periods, function(items) {
+      periods = items
     });
   }
-  var tempTempPeriods = store.get("periodInfo")
-  if(tempTempPeriods){
-    tempPeriods = tempTempPeriods;
+  if(store){
+    let tempPeriods = store.get("periodInfo")
+    if(tempPeriods) periods = tempPeriods
   }
-  for(i in tempPeriods){
-    set(i, tempPeriods[i])
-  }
+  set(periods)
 }
-$(document).ready(restore_options);
-$('#submit').click(save_options);
+
+$(document).ready(restore);
+$('#submit').click(save);
