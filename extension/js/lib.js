@@ -171,17 +171,19 @@ function getScheduleToday(now){
       return scheduleOutput
     }else if(dayType == "minimum"){
       console.log(dayType)
+      var allPeriods = schedule.schedule.minimum.periods;
+      var outPeriods = {};
       for(period in schedule.schedule.minimum.periods){
-        var allPeriods = schedule.schedule.minimum.periods;
         let shouldGetInfo = !isNaN(parseInt(period))
-        allPeriods[period] = {
+        outPeriods[period] = {
             start: timeToday(allPeriods[period][0], now),
             end: timeToday(allPeriods[period][1], now),
             interval:Interval.fromDateTimes(timeToday(allPeriods[period][0], now), timeToday(allPeriods[period][1], now)),
             period:shouldGetInfo?getPeriodInfo(period):{period:period}
         }
       }
-      return allPeriods
+      todaysSchedule = outPeriods
+      return outPeriods
     }
 }
 
@@ -244,6 +246,7 @@ function isSchool(now){
   var scheduleToday = getScheduleToday(now)
   var start = scheduleToday[1].start
   var end = now.set({hour:14, minute:55})
+  if(getDayType(now) == "minimum") end = end.set({hour:12, minute:20}) // TODO : FIX THIS HERE!!
   if(now <= start) return [false, "Before School"];
   if(now >= end) return [false, "After School"];
 
