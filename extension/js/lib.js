@@ -54,6 +54,26 @@ var schedule = {
       Fri:{
         dropped:[4,8]
       }
+    },
+    minimum:{
+      periods:{
+        "1":[{hour:7, minute:55},{hour:8, minute:26}],
+        "p2":[{hour:8, minute:26},{hour:8, minute:29}],
+        "2":[{hour:8, minute:29},{hour:8, minute:58}],
+        "p3":[{hour:8, minute:58},{hour:9, minute:01}],
+        "3":[{hour:9, minute:01},{hour:9, minute:30}],
+        "p4":[{hour:9, minute:30},{hour:9, minute:33}],
+        "4":[{hour:9, minute:33},{hour:10, minute:02}],
+        "Break":[{hour:10, minute:02},{hour:10, minute:12}],
+        "p5":[{hour:10, minute:12},{hour:10, minute:15}],
+        "5":[{hour:10, minute:15},{hour:10, minute:44}],
+        "p6":[{hour:10, minute:44},{hour:10, minute:47}],
+        "6":[{hour:10, minute:47},{hour:11, minute:16}],
+        "p7":[{hour:11, minute:16},{hour:11, minute:19}],
+        "7":[{hour:11, minute:19},{hour:11, minute:48}],
+        "p8":[{hour:11, minute:48},{hour:11, minute:51}],
+        "8":[{hour:11, minute:51},{hour:12, minute:20}]
+      }
     }
   },
 	school_year:[DateTime.local(2018, 8, 20), DateTime.local(2019, 6, 7)],
@@ -69,7 +89,20 @@ var schedule = {
 		{name: "Staff Development Day", dates:[DateTime.local(2019, 03, 19)]},
 		{name: "Spring Break", dates:[DateTime.local(2019, 04, 15), DateTime.local(2019, 04, 16), DateTime.local(2019, 04, 17), DateTime.local(2019, 04, 18), DateTime.local(2019, 04, 19)]},
 		{name: "Memorial Day", dates:[DateTime.local(2019, 05, 27)]}
-	]
+	],
+  minimum_days:[
+    {name:"First Day Of School", date:DateTime.local(2018, 8, 20)},
+    {name:"Back To School Night", date:DateTime.local(2018, 8, 28)},
+    {name:"School Conferences", date:DateTime.local(2018, 10, 1)},
+    {name:"School Conferences", date:DateTime.local(2018, 10, 2)},
+    {name:"School Conferences", date:DateTime.local(2018, 10, 3)},
+    {name:"School Conferences", date:DateTime.local(2018, 10, 4)},
+    {name:"School Conferences", date:DateTime.local(2018, 10, 5)},
+    {name:"End of First Trimester", date:DateTime.local(2018, 11, 2)},
+    {name:"End of Second Trimester", date:DateTime.local(2019, 2, 15)},
+    {name:"End of Third Trimester", date:DateTime.local(2019, 5, 24)},
+    {name:"Last Day of School", date:DateTime.local(2019, 6, 7)}
+  ]
 }
 
 
@@ -80,61 +113,88 @@ function timeToday(object, now){
 function getScheduleToday(now){
     if(!now) now = DateTime.local()
     if(todaysSchedule != null && todaysSchedule) return todaysSchedule
-    var day = now.weekdayShort
-    if(day == "Sat" || day == "Sun") return null
-    var dayObject = schedule.schedule.days[day]
-    var scheduleOutput = {}
-    if(dayObject.dropped.length > 0 || day != "Mon"){
-        var session = 1;
-        var dropped = dayObject.dropped
-        var sessions = schedule.schedule.sessions
-        var push = function(session, period, shouldGetInfo){
-          scheduleOutput[session] = {
-              start: timeToday(sessions[session][0], now),
-              end: timeToday(sessions[session][1], now),
-              interval:Interval.fromDateTimes(timeToday(sessions[session][0], now), timeToday(sessions[session][1], now)),
-              period:shouldGetInfo?getPeriodInfo(period):{period:period}
-          }
-        }
-        for(period in periods){
-          if (!periods.hasOwnProperty(period)) continue;
-          if(!dropped.includes(parseInt(period))){
-            push(session, period, true)
-            session++
-          }
-        }
-        for(sess in schedule.schedule.sessions){
-          if(isNaN(parseInt(sess))){
-            console.log(sess)
-            // is it the period before a dropped period
-            for(i in dropped){
-              if(parseFloat(sess) == dropped[i]) break;
+    if((dayType = getDayType(now)) == "regular" && dayType){
+      var day = now.weekdayShort
+      if(day == "Sat" || day == "Sun") return null
+      var dayObject = schedule.schedule.days[day]
+      var scheduleOutput = {}
+      if(dayObject.dropped.length > 0 || day != "Mon"){
+          var session = 1;
+          var dropped = dayObject.dropped
+          var sessions = schedule.schedule.sessions
+          var push = function(session, period, shouldGetInfo){
+            scheduleOutput[session] = {
+                start: timeToday(sessions[session][0], now),
+                end: timeToday(sessions[session][1], now),
+                interval:Interval.fromDateTimes(timeToday(sessions[session][0], now), timeToday(sessions[session][1], now)),
+                period:shouldGetInfo?getPeriodInfo(period):{period:period}
             }
-            let TempSess = sess;
-            if(sess[0] == "p") TempSess = "Passing Period"
-            push(sess, TempSess, false)
           }
-        }
-    }else if(day == "Mon"){
-        for(period in dayObject.periods){
+          for(period in periods){
+            if (!periods.hasOwnProperty(period)) continue;
+            if(!dropped.includes(parseInt(period))){
+              push(session, period, true)
+              session++
+            }
+          }
+          for(sess in schedule.schedule.sessions){
+            if(isNaN(parseInt(sess))){
+              console.log(sess)
+              // is it the period before a dropped period
+              for(i in dropped){
+                if(parseFloat(sess) == dropped[i]) break;
+              }
+              let TempSess = sess;
+              if(sess[0] == "p") TempSess = "Passing Period"
+              push(sess, TempSess, false)
+            }
+          }
+      }else if(day == "Mon"){
+          for(period in dayObject.periods){
 
-            scheduleOutput[period] = {
-                start:timeToday(dayObject.periods[period][0], now),
-                end:timeToday(dayObject.periods[period][1], now),
-                interval:Interval.fromDateTimes(timeToday(dayObject.periods[period][0], now), timeToday(dayObject.periods[period][1], now))
-            }
-            let periodField = period;
-            if(period[0] == "p") periodField = "Passing Period"
-            if(isNaN(parseInt(periodField))){
-              periodField = {period:periodField}
-            }else{
-              periodField = getPeriodInfo(periodField)
-            }
-            scheduleOutput[period].period = periodField
+              scheduleOutput[period] = {
+                  start:timeToday(dayObject.periods[period][0], now),
+                  end:timeToday(dayObject.periods[period][1], now),
+                  interval:Interval.fromDateTimes(timeToday(dayObject.periods[period][0], now), timeToday(dayObject.periods[period][1], now))
+              }
+              let periodField = period;
+              if(period[0] == "p") periodField = "Passing Period"
+              if(isNaN(parseInt(periodField))){
+                periodField = {period:periodField}
+              }else{
+                periodField = getPeriodInfo(periodField)
+              }
+              scheduleOutput[period].period = periodField
+          }
+      }
+      todaysSchedule = scheduleOutput
+      return scheduleOutput
+    }else if(dayType == "minimum"){
+      console.log(dayType)
+      for(period in schedule.schedule.minimum.periods){
+        var allPeriods = schedule.schedule.minimum.periods;
+        let shouldGetInfo = !isNaN(parseInt(period))
+        allPeriods[period] = {
+            start: timeToday(allPeriods[period][0], now),
+            end: timeToday(allPeriods[period][1], now),
+            interval:Interval.fromDateTimes(timeToday(allPeriods[period][0], now), timeToday(allPeriods[period][1], now)),
+            period:shouldGetInfo?getPeriodInfo(period):{period:period}
         }
+      }
+      return allPeriods
     }
-    todaysSchedule = scheduleOutput
-    return scheduleOutput
+}
+
+function getDayType(now){
+  if(!now) now = DateTime.local()
+  // regular, minimum, assembly
+  for(let {name, date} of schedule.minimum_days){
+    if(date.toISODate() == now.toISODate()){
+      return "minimum"//[{name:name, dates:dates}, "now"]
+    }
+  }
+
+  return "regular"
 }
 
 function getPeriod(now){
