@@ -74,6 +74,52 @@ var schedule = {
         "p8":[{hour:11, minute:48},{hour:11, minute:51}],
         "8":[{hour:11, minute:51},{hour:12, minute:20}]
       }
+    },
+    //(\S+) (\d+):(\d+) - (\d+):(\d+)
+    // "$1":[{hour:$2, minute:$3},{hour:$4, minute:$5}],
+    assembly:{
+      periods:{
+        "1":[{hour:7, minute:55},{hour:8, minute:36}],
+        "p2":[{hour:8, minute:36},{hour:8, minute:39}],
+        "2":[{hour:8, minute:39},{hour:9, minute:17}],
+        "p3":[{hour:9, minute:17},{hour:9, minute:20}],
+        "3":[{hour:9, minute:20},{hour:9, minute:58}],
+        "p4":[{hour:9, minute:58},{hour:10, minute:1}],
+        "4":[{hour:10, minute:1},{hour:10, minute:39}],
+        "Break":[{hour:10, minute:39},{hour:10, minute:49}],
+        "p5":[{hour:10, minute:49},{hour:10, minute:52}],
+        "5":[{hour:10, minute:52},{hour:11, minute:30}],
+        "p5":[{hour:11, minute:30},{hour:11, minute:33}],
+        "6":[{hour:11, minute:33},{hour:12, minute:11}],
+        "Lunch":[{hour:12, minute:11},{hour:12, minute:51}],
+        "p7":[{hour:12, minute:51},{hour:12, minute:55}],
+        "7":[{hour:12, minute:55},{hour:13, minute:33}],
+        "p8A":[{hour:13, minute:33},{hour:13, minute:36}],
+        "8A":[{hour:13, minute:36},{hour:14, minute:14}],
+        "p8B":[{hour:14, minute:14},{hour:14, minute:17}],
+        "8B":[{hour:14, minute:17},{hour:14, minute:55}],
+      }
+    },
+    full_early_start:{
+      periods:{
+        "1":[{hour:7, minute:55},{hour:8, minute:42}],
+        "p2":[{hour:8, minute:42},{hour:8, minute:45}],
+        "2":[{hour:8, minute:45},{hour:9, minute:28}],
+        "p3":[{hour:9, minute:28},{hour:9, minute:31}],
+        "3":[{hour:9, minute:31},{hour:10, minute:14}],
+        "Break":[{hour:10, minute:14},{hour:10, minute:24}],
+        "p4":[{hour:10, minute:24},{hour:10, minute:27}],
+        "4":[{hour:10, minute:27},{hour:11, minute:10}],
+        "p5":[{hour:11, minute:10},{hour:11, minute:13}],
+        "5":[{hour:11, minute:13},{hour:11, minute:56}],
+        "Lunch":[{hour:11, minute:56},{hour:12, minute:36}],
+        "p6":[{hour:12, minute:36},{hour:12, minute:40}],
+        "6":[{hour:12, minute:40},{hour:13, minute:23}],
+        "p7":[{hour:13, minute:23},{hour:13, minute:26}],
+        "7":[{hour:13, minute:26},{hour:14, minute:9}],
+        "p8":[{hour:14, minute:9},{hour:14, minute:12}],
+        "8":[{hour:14, minute:12},{hour:14, minute:55}],
+      }
     }
   },
 	school_year:[DateTime.local(2018, 8, 20), DateTime.local(2019, 6, 7)],
@@ -102,14 +148,98 @@ var schedule = {
     {name:"End of Second Trimester", date:DateTime.local(2019, 2, 15)},
     {name:"End of Third Trimester", date:DateTime.local(2019, 5, 24)},
     {name:"Last Day of School", date:DateTime.local(2019, 6, 7)}
+  ],
+  assemblyDays:[
+
   ]
 }
 
 
 function timeToday(object, now){
-    return (now?now:DateTime.local()).set(object)
+    return now.set(object)
 }
 
+function getDayType(now){
+  if(!now) now = DateTime.local()
+  // regular, minimum, assembly
+  for(let {name, date} of schedule.minimum_days){
+    if(date.toISODate() == now.toISODate()){
+      return "minimum"//[{name:name, dates:dates}, "now"]
+    }
+  }
+/*
+  for(let {name, date} of schedule.asembly){
+    if(date.toISODate() == now.toISODate()){
+      return "asembly"//[{name:name, dates:dates}, "now"]
+    }
+  }
+*/
+  return now.weekdayShort
+}
+
+function getScheduleToday(now){
+  if(!now) now = DateTime.local()
+  if(todaysSchedule != null && todaysSchedule) return todaysSchedule
+  var dayType = getDayType(now)
+  var output = {}
+  console.log(output)
+  console.log(dayType)
+  function push(timeInput, timePeriod, infoPeriod){
+    if(!infoPeriod) infoPeriod = timePeriod
+    var info = {period:timePeriod}
+    if(timePeriod[0] == "p") info.period = "Passing Period"
+    if(!isNaN(parseInt(infoPeriod))) info = getPeriodInfo(infoPeriod)
+    output[infoPeriod] = {
+        start: timeToday(timeInput[timePeriod][0], now),
+        end: timeToday(timeInput[timePeriod][1], now),
+        interval:Interval.fromDateTimes(timeToday(timeInput[timePeriod][0], now), timeToday(timeInput[timePeriod][1], now)),
+        period:info
+    }
+  }
+
+  if(dayType == "minimum"){
+    let minimumPeriods = schedule.schedule.minimum.periods;
+    for(period in minimumPeriods){
+      push(minimumPeriods, period)
+    }
+  }else if(dayType == "assembly"){
+    let assemblyPeriods = schedule.schedule.assembly.periods;
+    for(period in assemblyPeriods){
+      push(assemblyPeriods, period)
+    }
+  }else if(dayType == "Mon"){
+    for(period in dayObject.periods){
+      push(dayObject.periods, period)
+    }
+  }else if(dayType != "Sat" && dayType != "Sun"){
+    let dropped = schedule.schedule.days[dayType].dropped
+    let sessions = schedule.schedule.sessions
+    let periodsToday = [null]
+
+    for(period in periods){
+      if(!dropped.includes(parseInt(period))){
+        periodsToday.push(period)
+      }
+    }
+
+    for(session in sessions){
+      if(isNaN(parseInt(session))){
+        push(sessions, session)
+      }else{
+        push(sessions, session, periodsToday[session])
+      }
+    }
+  }else{
+      return null;
+      console.error("Not min, Mon, or weekday")
+  }
+
+  console.log(output)
+  todaysSchedule = output
+  return todaysSchedule
+}
+
+/*
 function getScheduleToday(now){
     if(!now) now = DateTime.local()
     if(todaysSchedule != null && todaysSchedule) return todaysSchedule
@@ -186,18 +316,8 @@ function getScheduleToday(now){
       return outPeriods
     }
 }
+*/
 
-function getDayType(now){
-  if(!now) now = DateTime.local()
-  // regular, minimum, assembly
-  for(let {name, date} of schedule.minimum_days){
-    if(date.toISODate() == now.toISODate()){
-      return "minimum"//[{name:name, dates:dates}, "now"]
-    }
-  }
-
-  return "regular"
-}
 
 function getPeriod(now){
   if(!now) now = DateTime.local();
@@ -244,8 +364,10 @@ function isSchool(now){
 
   // is it before or after school
   var scheduleToday = getScheduleToday(now)
-  var start = scheduleToday[1].start
-  var end = now.set({hour:14, minute:55})
+  let first = (scheduleToday[1] || scheduleToday[2])
+  let last = (scheduleToday[7] || scheduleToday[8])
+  var start = first.start
+  var end = last.end
   if(getDayType(now) == "minimum") end = end.set({hour:12, minute:20}) // TODO : FIX THIS HERE!!
   if(now <= start) return [false, "Before School"];
   if(now >= end) return [false, "After School"];
