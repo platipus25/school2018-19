@@ -1,7 +1,7 @@
 function init(now){
   todaysSchedule = null
-  var periodCountdownId
-  var dayOffCountdownId
+  var periodCountdownId = store.get("periodCountdownId")
+  var dayOffCountdownId = store.get("dayOffCountdownId")
   var timeOfDayId = window.timeOfDayId
 
   if(!now) now = DateTime.local()
@@ -35,7 +35,8 @@ function init(now){
 
     if(periodCountdownId) clearInterval(periodCountdownId)
     periodCountdown(thisPeriod.end)
-    periodCountdownId = setInterval(periodCountdown, 30000, thisPeriod.end)
+    periodCountdownId = setInterval(periodCountdown, 0.5*(60)*(1000), thisPeriod.end)
+    store.set("periodCountdownId", periodCountdownId)
 
     var periodName = thisPeriod.period.period
     if(thisPeriod.period.subject) periodName = thisPeriod.period.subject
@@ -66,7 +67,8 @@ function init(now){
 
   if(dayOffCountdownId) clearInterval(dayOffCountdownId)
   dayOffCountdown(nextDayOff[0].dates[0])
-  dayOffCountdownId = setInterval(dayOffCountdown, 2*(60*1000)/*30 minutes */, nextDayOff[0].dates[0])
+  dayOffCountdownId = setInterval(dayOffCountdown, 2*(60*1000)/*2 minutes */, nextDayOff[0].dates[0])
+  store.set("dayOffCountdownId", dayOffCountdownId)
   $("#nameOfBreak").text(nextDayOff[0].name)
 
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
@@ -89,7 +91,10 @@ $(document).ready(function(){
   init(now)
   console.timeEnd("init")
   console.groupEnd()
-  setInterval(function(){init()}, 60000)
+
+  var initId = setInterval(function(){init()}, 60000)
+  clearInterval(store.get("initId"))
+  store.set("initId", initId)
 });
 
 //setTimeout(60000, function(){window.close()});
