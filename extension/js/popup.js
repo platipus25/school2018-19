@@ -116,3 +116,6 @@ $(document).ready(function(){
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
   setInterval(function(){init()}, 1*60*1000)
 });
+$(window).focus(function(){
+  init()
+})
