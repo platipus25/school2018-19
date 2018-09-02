@@ -1,17 +1,31 @@
-function init(now){
-  todaysSchedule = null
-  var periodCountdownId = store.get("periodCountdownId")
-  var dayOffCountdownId = store.get("dayOffCountdownId")
-  var timeOfDayId = window.timeOfDayId
-
-  if(!now) now = DateTime.local()
+function init(nowIn){
+  if(nowIn && !nowIn.isValid) return "invalid DateTime"
+  console.group()
+  console.time("init")
+  if(nowIn){
+    now = nowIn
+  }else{
+    now = DateTime.local()
+  }
   window.now = now;
+  try{
+    if(todaysSchedule){
+      if(todaysSchedule.Break.start.toISODate() != now.toISODate()){
+        console.log(todaysSchedule.Break.start.toISODate())
+        todaysSchedule = null
+      }else{
+        console.log("still today")
+      }
+    }
+  }catch(exception){
+    console.log("todaysSchedule doesn't exist", exception)
+  }
+  //var periodCountdownId = store.get("periodCountdownId")
+  //var dayOffCountdownId = store.get("dayOffCountdownId")
+  //var timeOfDayId = window.timeOfDayId
+
   $("#nowDate").text(now.weekdayShort+" "+now.toLocaleString(DateTime.DATE_SMALL))
   $("#nowTime").text(now.toLocaleString(DateTime.TIME_SIMPLE))
-  if(timeOfDayId) clearInterval(timeOfDayId)
-  window.timeOfDayId = setInterval(function(){
-    $("#nowTime").text(now.toLocaleString(DateTime.TIME_SIMPLE))
-  }, 1000)
 
   // check if isSchool
   var schoolInSession = isSchool(now);
@@ -27,28 +41,32 @@ function init(now){
   thisPeriod = getPeriod(now)
   nextPeriod = getNextPeriod(now)
   if(thisPeriod){
-    function periodCountdown(end){
+    var ts = countdown(now.toJSDate(), thisPeriod.end.toJSDate(), countdown.HOURS| countdown.MINUTES)
+    console.log("periodCountdown", ts)
+    $('#endOfPeriodCountdown').html(ts.toHTML());
+    /*function periodCountdown(end){
       var now = window.now
       var ts = countdown(now.toJSDate(), end.toJSDate(), countdown.HOURS| countdown.MINUTES)
+      console.log("periodCountdown", ts)
       if(ts.value > 1) $('#endOfPeriodCountdown').html(ts.toHTML());
-    }
+    }*/
 
-    if(periodCountdownId) clearInterval(periodCountdownId)
+    /*if(periodCountdownId) clearInterval(periodCountdownId)
     periodCountdown(thisPeriod.end)
     periodCountdownId = setInterval(periodCountdown, 0.5*(60)*(1000), thisPeriod.end)
-    store.set("periodCountdownId", periodCountdownId)
+    store.set("periodCountdownId", periodCountdownId)*/
 
     var periodName = thisPeriod.period.period
     if(thisPeriod.period.subject) periodName = thisPeriod.period.subject
     if(!isNaN(parseInt(periodName))) periodName = "Period "+periodName
-    console.log(periodName)
+    console.log("This period is:", periodName)
     $("#thisPeriod").text(periodName)
   }
 
   if(!nextPeriod){
     $(".nextPeriod").text("__")
   }else{
-    console.log(nextPeriod)
+    console.log("Next period is:", nextPeriod)
     for(field in nextPeriod.period){
       $("#"+field).text(nextPeriod.period[field])
     }
@@ -58,20 +76,26 @@ function init(now){
 
   nextDayOff = getNextDayOff(now)
 
-  function dayOffCountdown(end){
+  /*function dayOffCountdown(end){
     var now = window.now
     var ts = countdown(now.toJSDate(), end.toJSDate(), countdown.MONTHS|countdown.DAYS|countdown.HOURS)
     console.log("dayOffCountdown", ts)
     if(ts.value) $('#dayOffCountdown').html(ts.toHTML());
-  }
+  }*/
 
-  if(dayOffCountdownId) clearInterval(dayOffCountdownId)
+  /*if(dayOffCountdownId) clearInterval(dayOffCountdownId)
   dayOffCountdown(nextDayOff[0].dates[0])
-  dayOffCountdownId = setInterval(dayOffCountdown, 2*(60*1000)/*2 minutes */, nextDayOff[0].dates[0])
-  store.set("dayOffCountdownId", dayOffCountdownId)
+  dayOffCountdownId = setInterval(dayOffCountdown, 2*(60*1000), nextDayOff[0].dates[0])
+  store.set("dayOffCountdownId", dayOffCountdownId)*/
+
+  var ts = countdown(now.toJSDate(), nextDayOff[0].dates[0].toJSDate(), countdown.MONTHS|countdown.DAYS|countdown.HOURS)
+  console.log("dayOffCountdown", ts)
+  if(ts.value) $('#dayOffCountdown').html(ts.toHTML());
   $("#nameOfBreak").text(nextDayOff[0].name)
 
-  $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
+
+  console.timeEnd("init")
+  console.groupEnd()
 }
 
 function randomDate(now){
@@ -84,17 +108,11 @@ function randomDate(now){
 }
 
 $(document).ready(function(){
-  console.group()
-  console.time("init")
+
   now = DateTime.local()//randomDate()
   console.log(now.toISO())
   init(now)
-  console.timeEnd("init")
-  console.groupEnd()
 
-  var initId = setInterval(function(){init()}, 60000)
-  clearInterval(store.get("initId"))
-  store.set("initId", initId)
+  $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
+  setInterval(function(){init()}, 1*60*1000)
 });
-
-//setTimeout(60000, function(){window.close()});
