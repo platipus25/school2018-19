@@ -1,6 +1,6 @@
 var DateTime = luxon.DateTime;
 var Interval = luxon.Interval;
-var todaysSchedule = null;
+todaysSchedule = null;
 
 var schedule = {
   schedule:{
@@ -208,8 +208,9 @@ function getScheduleToday(now){
       push(assemblyPeriods, period)
     }
   }else if(dayType == "Mon"){
-    for(period in dayObject.periods){
-      push(dayObject.periods, period)
+    let mondayPeriods = schedule.schedule.days.Mon.periods
+    for(period in mondayPeriods){
+      push(mondayPeriods, period)
     }
   }else if(dayType != "Sat" && dayType != "Sun"){
     let dropped = schedule.schedule.days[dayType].dropped
@@ -235,7 +236,7 @@ function getScheduleToday(now){
   }
 
   console.log(output)
-  todaysSchedule = output
+  window.todaysSchedule = output
   return todaysSchedule
 }
 
