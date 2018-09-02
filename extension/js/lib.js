@@ -287,10 +287,14 @@ function isSchool(now){
   // is it before or after school
   var scheduleToday = getScheduleToday(now)
   let first = (scheduleToday[1] || scheduleToday[2])
-  let last = (scheduleToday[7] || scheduleToday[8])
+  let last = (scheduleToday[8] || scheduleToday[7])
   var start = first.start
   var end = last.end
-  if(getDayType(now) == "minimum") end = end.set({hour:12, minute:20}); console.error(end) // TODO : FIX THIS HERE!!
+  /*if(getDayType(now) == "minimum"){
+    end = end.set({hour:12, minute:20});
+    console.error(end)
+     // TODO : FIX THIS HERE!!
+   }*/
   if(now <= start) return [false, "Before School"];
   if(now >= end) return [false, "After School"];
 
