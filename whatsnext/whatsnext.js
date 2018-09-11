@@ -16,7 +16,7 @@ whatsnext = {
       }
     }
     console.log("Today is a "+day)
-    var todaysObject = schedule[day]// TODO: Fix object thing
+    var todaysObject = JSON.parse(JSON.stringify(schedule[day]))
     //console.log(todaysObject)
     this.scheduleToday = {}
 
