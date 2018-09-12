@@ -1,4 +1,5 @@
 whatsnext = {
+  schedule:schedule2018_19(),
   scheduleToday:null,
   scheduleTodayDate:null,
   getScheduleToday: function(now){
@@ -63,7 +64,7 @@ whatsnext = {
   },
   isSchool: function(now){
     if(!now) now = new Date()
-    var schedule = schedule2018_19()
+    var schedule = this.schedule()
 
     // Is it summer break
     if(now < schedule.school_year.start || now > schedule.school_year.end){
@@ -96,7 +97,7 @@ whatsnext = {
   },
   getNextDayOff:function(now){
     if(!now) now = new Date();
-    var schedule = schedule2018_19()
+    var schedule = this.schedule()
     for(let {name, date} of schedule.days_off){
       if(date > now){
         return {name:name, date:date, rel:"next"} 
