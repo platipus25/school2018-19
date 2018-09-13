@@ -1,5 +1,5 @@
 whatsnext = {
-  schedule:schedule2018_19(),
+  schedule:function(){return schedule2018_19()},
   scheduleToday:null,
   scheduleTodayDate:null,
   getScheduleToday: function(now){
@@ -58,6 +58,7 @@ whatsnext = {
   getNextPeriod:function(now){
     if(!now) now = new Date()
     var endOfThisPeriod = this.getThisPeriod(now).end
+    if(!endOfThisPeriod) return {period:"none", start:null, end:null, info:null}
     var fourMinutesFromEndOfThisPeriod = new Date(endOfThisPeriod.valueOf()+(4*60*1000))
     var thisPeriod = this.getThisPeriod(fourMinutesFromEndOfThisPeriod)
     return thisPeriod
@@ -710,7 +711,7 @@ whatsnext = {
 }
 schedule2018_19()*/
   // (".+"):\[(\S+ \S+}),(\S+ \S+})] => $1:{\n\tperiod:$1,\n\tstart:$2,\n\tend:$3,\n\tinfo:null\n}
-whatsnext.getScheduleToday(new Date())
+//whatsnext.getScheduleToday(new Date())
 
 /*
 {
