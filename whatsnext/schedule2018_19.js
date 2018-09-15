@@ -1,5 +1,5 @@
 function schedule2018_19(){
-  let schedule = {
+  return {
     monday:{
       "1":{
         period:"1",
@@ -115,7 +115,7 @@ function schedule2018_19(){
     		period:"p2",
     		start:{hour:8, minute:59},
     		end:{hour:9, minute:2},
-    		info:{}
+    		info:null
     	},
       "3":{
     		period:"3",
@@ -127,13 +127,13 @@ function schedule2018_19(){
     		period:"Break",
     		start:{hour:10, minute:0},
     		end:{hour:10, minute:10},
-    		info:{}
+    		info:null
     	},
       "p3":{
     		period:"p3",
     		start:{hour:10, minute:10},
     		end:{hour:10, minute:13},
-    		info:{}
+    		info:null
     	},
       "4":{
     		period:"4",
@@ -145,7 +145,7 @@ function schedule2018_19(){
     		period:"p4",
     		start:{hour:11, minute:11},
     		end:{hour:11, minute:14},
-    		info:{}
+    		info:null
     	},
       "6":{
     		period:"6",
@@ -157,13 +157,13 @@ function schedule2018_19(){
     		period:"Lunch",
     		start:{hour:12, minute:12},
     		end:{hour:12, minute:52},
-    		info:{}
+    		info:null
     	},
       "p5":{
     		period:"p5",
     		start:{hour:12, minute:52},
     		end:{hour:12, minute:56},
-    		info:{}
+    		info:null
     	},
       "7":{
     		period:"7",
@@ -175,7 +175,7 @@ function schedule2018_19(){
     		period:"p6",
     		start:{hour:13, minute:54},
     		end:{hour:13, minute:57},
-    		info:{}
+    		info:null
     	},
       "8":{
     		period:"8",
@@ -195,7 +195,7 @@ function schedule2018_19(){
     		period:"p2",
     		start:{hour:8, minute:59},
     		end:{hour:9, minute:2},
-    		info:{}
+    		info:null
     	},
       "3":{
     		period:"3",
@@ -207,13 +207,13 @@ function schedule2018_19(){
     		period:"Break",
     		start:{hour:10, minute:0},
     		end:{hour:10, minute:10},
-    		info:{}
+    		info:null
     	},
       "p3":{
     		period:"p3",
     		start:{hour:10, minute:10},
     		end:{hour:10, minute:13},
-    		info:{}
+    		info:null
     	},
       "4":{
     		period:"4",
@@ -225,7 +225,7 @@ function schedule2018_19(){
     		period:"p4",
     		start:{hour:11, minute:11},
     		end:{hour:11, minute:14},
-    		info:{}
+    		info:null
     	},
       "5":{
     		period:"5",
@@ -237,13 +237,13 @@ function schedule2018_19(){
     		period:"Lunch",
     		start:{hour:12, minute:12},
     		end:{hour:12, minute:52},
-    		info:{}
+    		info:null
     	},
       "p5":{
     		period:"p5",
     		start:{hour:12, minute:52},
     		end:{hour:12, minute:56},
-    		info:{}
+    		info:null
     	},
       "7":{
     		period:"7",
@@ -255,7 +255,7 @@ function schedule2018_19(){
     		period:"p6",
     		start:{hour:13, minute:54},
     		end:{hour:13, minute:57},
-    		info:{}
+    		info:null
     	},
       "8":{
     		period:"8",
@@ -275,7 +275,7 @@ function schedule2018_19(){
     		period:"p2",
     		start:{hour:8, minute:59},
     		end:{hour:9, minute:2},
-    		info:{}
+    		info:null
     	},
       "2":{
     		period:"2",
@@ -287,13 +287,13 @@ function schedule2018_19(){
     		period:"Break",
     		start:{hour:10, minute:0},
     		end:{hour:10, minute:10},
-    		info:{}
+    		info:null
     	},
       "p3":{
     		period:"p3",
     		start:{hour:10, minute:10},
     		end:{hour:10, minute:13},
-    		info:{}
+    		info:null
     	},
       "4":{
     		period:"4",
@@ -305,7 +305,7 @@ function schedule2018_19(){
     		period:"p4",
     		start:{hour:11, minute:11},
     		end:{hour:11, minute:14},
-    		info:{}
+    		info:null
     	},
       "5":{
     		period:"5",
@@ -317,13 +317,13 @@ function schedule2018_19(){
     		period:"Lunch",
     		start:{hour:12, minute:12},
     		end:{hour:12, minute:52},
-    		info:{}
+    		info:null
     	},
       "p5":{
     		period:"p5",
     		start:{hour:12, minute:52},
     		end:{hour:12, minute:56},
-    		info:{}
+    		info:null
     	},
       "6":{
     		period:"6",
@@ -335,7 +335,7 @@ function schedule2018_19(){
     		period:"p6",
     		start:{hour:13, minute:54},
     		end:{hour:13, minute:57},
-    		info:{}
+    		info:null
     	},
       "8":{
     		period:"8",
@@ -355,7 +355,7 @@ function schedule2018_19(){
     		period:"p2",
     		start:{hour:8, minute:59},
     		end:{hour:9, minute:2},
-    		info:{}
+    		info:null
     	},
       "2":{
     		period:"2",
@@ -367,13 +367,13 @@ function schedule2018_19(){
     		period:"Break",
     		start:{hour:10, minute:0},
     		end:{hour:10, minute:10},
-    		info:{}
+    		info:null
     	},
       "p3":{
     		period:"p3",
     		start:{hour:10, minute:10},
     		end:{hour:10, minute:13},
-    		info:{}
+    		info:null
     	},
       "3":{
     		period:"3",
@@ -385,7 +385,7 @@ function schedule2018_19(){
     		period:"p4",
     		start:{hour:11, minute:11},
     		end:{hour:11, minute:14},
-    		info:{}
+    		info:null
     	},
       "5":{
     		period:"5",
@@ -397,13 +397,13 @@ function schedule2018_19(){
     		period:"Lunch",
     		start:{hour:12, minute:12},
     		end:{hour:12, minute:52},
-    		info:{}
+    		info:null
     	},
       "p5":{
     		period:"p5",
     		start:{hour:12, minute:52},
     		end:{hour:12, minute:56},
-    		info:{}
+    		info:null
     	},
       "6":{
     		period:"6",
@@ -415,7 +415,7 @@ function schedule2018_19(){
     		period:"p6",
     		start:{hour:13, minute:54},
     		end:{hour:13, minute:57},
-    		info:{}
+    		info:null
     	},
       "7":{
     		period:"7",
@@ -435,7 +435,7 @@ function schedule2018_19(){
     		period:"p2",
     		start:{hour:8, minute:26},
     		end:{hour:8, minute:29},
-    		info:{}
+    		info:null
     	},
       "2":{
     		period:"2",
@@ -447,7 +447,7 @@ function schedule2018_19(){
     		period:"p3",
     		start:{hour:8, minute:58},
     		end:{hour:9, minute:01},
-    		info:{}
+    		info:null
     	},
       "3":{
     		period:"3",
@@ -459,7 +459,7 @@ function schedule2018_19(){
     		period:"p4",
     		start:{hour:9, minute:30},
     		end:{hour:9, minute:33},
-    		info:{}
+    		info:null
     	},
       "4":{
     		period:"4",
@@ -471,13 +471,13 @@ function schedule2018_19(){
     		period:"Break",
     		start:{hour:10, minute:02},
     		end:{hour:10, minute:12},
-    		info:{}
+    		info:null
     	},
       "p5":{
     		period:"p5",
     		start:{hour:10, minute:12},
     		end:{hour:10, minute:15},
-    		info:{}
+    		info:null
     	},
       "5":{
     		period:"5",
@@ -489,7 +489,7 @@ function schedule2018_19(){
     		period:"p6",
     		start:{hour:10, minute:44},
     		end:{hour:10, minute:47},
-    		info:{}
+    		info:null
     	},
       "6":{
     		period:"6",
@@ -501,7 +501,7 @@ function schedule2018_19(){
     		period:"p7",
     		start:{hour:11, minute:16},
     		end:{hour:11, minute:19},
-    		info:{}
+    		info:null
     	},
       "7":{
     		period:"7",
@@ -513,7 +513,7 @@ function schedule2018_19(){
     		period:"p8",
     		start:{hour:11, minute:48},
     		end:{hour:11, minute:51},
-    		info:{}
+    		info:null
     	},
       "8":{
     		period:"8",
@@ -568,7 +568,6 @@ function schedule2018_19(){
   	],
     school_year:{start:new Date(2018, 7, 20), end:new Date(2019, 5, 7)}
   }
-  console.log(schedule)
-  return schedule
 }
 schedule2018_19()
+
