@@ -40,15 +40,11 @@ whatsnext = {
 
     for(period in todaysObject){
       let periodObject = todaysObject[period]
-      //console.log(periodObject)
       periodObject.start = timeToday(periodObject.start, now)
       periodObject.end = timeToday(periodObject.end, now)
-      if(!isNaN(parseInt(period))){
+      if(periodObject.info != null){
         periodObject.info = this.infoFunc(period)
-      }else{
-        periodObject.info = null
       }
-      //periodObject.info = periodObject.info
     }
     //console.log("Today's shcedule is: \n", todaysObject)
     this.scheduleToday = todaysObject
