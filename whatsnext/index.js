@@ -3,10 +3,13 @@ console.log(whatsnextLib)
 
 whatsnextLib.periodInfo = {
   1:{
-
+    subject:"Science",
+    teacher:"Mr. Newman",
+    room:209
   },
   2:{
-
+    subject:"Orchestra",
+    teacher:"Ms. Miyata"
   },
   3:{
 
