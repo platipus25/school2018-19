@@ -56,6 +56,7 @@ function init(nowIn){
     $(".nextPeriod").text("__")
   }else{
     console.log("Next period is:", nextPeriod)
+    $(".nextPeriod").text("__")
     for(field in nextPeriod.period){
       $("#"+field).text(nextPeriod.period[field])
     }
