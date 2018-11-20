@@ -1,12 +1,13 @@
 class whatsnext{
   constructor(time){
-    this.static = (time==true)
-    if(this.static){
+    if(time){
       this.time = time
+      Object.defineProperty(this, 'now', {get:function(){return this.time}});
+      this.day = this.time.toLocaleDateString()
     }else{
       this.time = new Date()
+      this.day = null
     }
-    this.day = this.time.toLocaleDateString()
     this.theScheduleToday = null
     this.periodInfo = {}
   }
@@ -44,21 +45,14 @@ class whatsnext{
     return new info(period, this)
   }
   get now(){
-    if(this.static){
-      return this.time
-    }else{
-      return new Date()
-    }
+    return new Date()
   }
   get schedule_base(){
-    var Httpreq = new XMLHttpRequest(); // a new request
-    Httpreq.open("GET", "schedule2018_19.json", false);
-    Httpreq.send(null);
-    return JSON.parse(Httpreq.responseText);
+    return schedule2018_19()
   }
   get schedule(){
     var now = this.now
-    if(this.theScheduleToday != null && this.day == this.time.toLocaleDateString()){
+    if(this.theScheduleToday != null){
       return this.theScheduleToday
     }
 
@@ -66,7 +60,6 @@ class whatsnext{
     var days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
     var day = days[now.getDay()]
     for(let {name, date} of schedule.minimum_days){
-      date = new Date(date["year"], date["month"], date["day"])
       if(date.toDateString() == now.toDateString()){
         day =  "minimum"//[{name:name, dates:dates}, "now"]
       }
@@ -169,7 +162,6 @@ class whatsnext{
     var now = this.now
     var schedule = this.schedule_base
     for(let {name, date} of schedule.days_off){
-      date = new Date(date["year"], date["month"], date["day"])
       if(date > now){
         return {name:name, date:date, rel:"next"}
       }

@@ -12,7 +12,9 @@ whatsnextLib.periodInfo = {
     teacher:"Ms. Miyata"
   },
   3:{
-
+    subject:"Tech Aide",
+    room:111,
+    flyingMonkey:10
   },
   4:{
     teacher:"Mr McNulty",
