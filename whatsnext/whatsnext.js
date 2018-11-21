@@ -1,183 +1,153 @@
 class whatsnext{
   constructor(time){
-    this.static = (time==true)
-    if(this.static){
-      this.time = time
-    }else{
-      this.time = new Date()
-    }
-    this.day = this.time.toLocaleDateString()
-    this.theScheduleToday = null
+    this.time = (time || new Date())
+    this.schedule_base = (function(){
+        var Httpreq = new XMLHttpRequest(); // a new request
+        Httpreq.open("GET", "js/schedule2018_19.json", false);
+        Httpreq.send(null);
+        return JSON.parse(Httpreq.responseText);
+      })()
     this.periodInfo = {}
+    this.scheduleToday = this.schedule();
   }
-  info(period){
-    if(!this.periodInfo.hasOwnProperty(period)) return {}
-    var thisPeriod = this.periodInfo[period]
-    let info = class{
-      constructor(period, thisRef){
-        this.period = period
-        this.parentRef = thisRef
-      }
-      get value(){
-        return this.parentRef.periodInfo[period]
-      }
-      get infoAsText(){
-        var formatted = ""
-        for(info in this.value){
-          var titleCase = info[0].toUpperCase()+info.slice(1, info.length)
-          formatted+=titleCase+": "+this.value[info]+"\n"
-        }
-        return formatted
-      }
-      infoAsHTML(tag){
-        if(!tag) tag = "span"
-        var formatted = "<div id='"+this.period+"' class='info'>"
-        for(info in this.value){
-          var titleCase = info[0].toUpperCase()+info.slice(1, info.length)
-          formatted+=("<"+tag+" class='field'>")+titleCase+("</"+tag+">")+": "+("<"+tag+" class='value'>")+this.value[info]+("</"+tag+">")+"<br>"
-        }
-        formatted = formatted.slice(0, formatted.length-4)
-        formatted+="</div>"
-        return formatted
-      }
-    }
-    return new info(period, this)
-  }
-  get now(){
-    if(this.static){
+
+  now(){
+    if(this.time){
       return this.time
     }else{
       return new Date()
     }
   }
-  get schedule_base(){
-    var Httpreq = new XMLHttpRequest(); // a new request
-    Httpreq.open("GET", "schedule2018_19.json", false);
-    Httpreq.send(null);
-    return JSON.parse(Httpreq.responseText);
+
+  objectToDate(obj){
+    if(obj.hasOwnProperty("year")){
+      return new Date(obj["year"], obj["month"], obj["day"])
+    }else if(obj.hasOwnProperty("minute")){
+      var now = this.now()
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate(), obj["hour"], obj["minute"])
+    }
   }
-  get schedule(){
-    var now = this.now
-    if(this.theScheduleToday != null && this.day == this.time.toLocaleDateString()){
-      return this.theScheduleToday
-    }
 
+  schedule(){
+    var now = this.now()
     var schedule = this.schedule_base
-    var days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    var day = days[now.getDay()]
-    for(let {name, date} of schedule.minimum_days){
-      date = new Date(date["year"], date["month"], date["day"])
-      if(date.toDateString() == now.toDateString()){
-        day =  "minimum"//[{name:name, dates:dates}, "now"]
-      }
+    if(now.toDateString() == this.time.toDateString() && this.scheduleToday){
+      return this.scheduleToday
+    }else{
+      this.scheduleToday = false
     }
-    console.log("Today is a "+day)
-    if(day == "sunday" || day == "saturday"){
-      return day
-    }
-    var todaysObject = JSON.parse(JSON.stringify(schedule[day]))
-    //console.log(todaysObject)
-    this.theScheduleToday = {}
+    var state = this.getState()
+    var day = state.day
 
-    function timeToday(object, now){
-      let otherNow = new Date(now.toString())
-      //console.log("Other Now for timeToday is "+otherNow)
-      otherNow.setHours(object.hour, object.minute, 0)
-      return otherNow
-    }
+    var today_base = schedule[day]
+    var todaysObject = {}
 
-    for(let period in todaysObject){
-      let periodObject = todaysObject[period]
-      periodObject.start = timeToday(periodObject.start, now)
-      periodObject.end = timeToday(periodObject.end, now)
+    for(let period in today_base){
+      let periodObject = today_base[period]
+      todaysObject[period] = {}
+      todaysObject[period].start = this.objectToDate(periodObject.start)
+      todaysObject[period].end = this.objectToDate(periodObject.end)
       if(periodObject.info != null){
-        var thisRef = this
-        periodObject.info = this.info(period)
+        todaysObject[period].info = {}
+        if(this.periodInfo.hasOwnProperty(period)){
+          todaysObject[period].info = this.periodInfo[period]
+        }
+        todaysObject[period].info.period = period
       }
     }
-    //console.log("Today's shcedule is: \n", todaysObject)
-    this.theScheduleToday = todaysObject
-    return this.theScheduleToday
-  }
-  get thisPeriod(){
-    var now = this.now
-    var scheduleToday = this.schedule
-    for(let period in scheduleToday){
-      let periodObj = scheduleToday[period]
-      if(periodObj.end > now){
-        if(periodObj.start <= now){
-          return periodObj
-        }
-      }
+
+    if(today_base == undefined){
+      return null
     }
-    return {period:"none", start:null, end:null, info:null}
+    //console.log("state, schedule:", state, todaysObject)
+    return (this.scheduleToday = todaysObject);
   }
-  get nextPeriod(){
-    var now = this.now
-    var endOfThisPeriod = this.thisPeriod.end
-    if(!endOfThisPeriod) return {period:"none", start:null, end:null, info:null}
-    var fourMinutesFromEndOfThisPeriod = new Date(endOfThisPeriod.valueOf()+(4*60*1000))
-    var period = (function(now, schedule){
-      var scheduleToday = schedule
-      for(let period in scheduleToday){
-        let periodObj = scheduleToday[period]
-        if(periodObj.end > now){
-          if(periodObj.start <= now){
-            return periodObj
-          }
-        }
-      }
-      return {period:"none", start:null, end:null, info:null}
-    })(fourMinutesFromEndOfThisPeriod, this.schedule)
-    return period
-  }
-  get isSchool(){
-    var now = this.now
+
+  getState(){
+    var now = this.now()
     var schedule = this.schedule_base
+    var state = {
+      day:null,
+      nextDayOff:null,
+      thisPeriod:null,
+      nextPeriod:null
+    }
 
     // Is it summer break
-    if(now < schedule.school_year.start || now > schedule.school_year.end){
-      return [false, "Summer!!"]
+    if(now < this.objectToDate(schedule.school_year.start) || now > this.objectToDate(schedule.school_year.end)){
+      state.day = "summer"
     }
-
     // is it weekend
     var days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
     var day = days[now.getDay()]
     if(day == "saturday" || day == "sunday"){
-      return [false, "Weekend"];
+      if(state.day == null){state.day = "weekend"}
+    }
+    if(state.day == null){
+      state.day = day
     }
 
     // is it a holiday or recess
-    var nextDayOff = this.nextDayOff
-    if(nextDayOff.rel == "now"){
-      return [false, nextDayOff.name];
-    }
-
-    // is it before or after school
-    var scheduleToday = this.schedule
-    let first = (scheduleToday[1] || scheduleToday[2])
-    let last = (scheduleToday[8] || scheduleToday[7])
-    var start = first.start
-    var end = last.end
-    if(now < start) return [false, "Before School"];
-    if(now > end) return [false, "After School"];
-
-    return [true, "Yup"];
-  }
-
-  get nextDayOff(){
-    var now = this.now
-    var schedule = this.schedule_base
+    var nextDayOff = null
     for(let {name, date} of schedule.days_off){
-      date = new Date(date["year"], date["month"], date["day"])
+      date = this.objectToDate(date)
       if(date > now){
-        return {name:name, date:date, rel:"next"}
+        nextDayOff = {name:name, date:date, rel:"next"}
+        break;
       }
       if(date.toDateString() == now.toDateString()){
-          return {name:name, date:date, rel:"now"}
+          nextDayOff = {name:name, date:date, rel:"now"}
+          break;
       }
       //console.log(name, date)
     }
-    return "nope"
+    state.nextDayOff = nextDayOff;
+
+    // is it before or after school
+    if(this.scheduleToday){
+      var scheduleToday = this.schedule()
+      let first = (scheduleToday[1] || scheduleToday[2])
+      let last = (scheduleToday[8] || scheduleToday[7])
+      var start = first.start
+      var end = last.end
+      if(now < start) {
+        state.thisPeriod = "before school"
+        state.nextPeriod = "before school"
+      }
+      if(now > end) {
+        state.thisPeriod = "after school"
+        state.nextPeriod = "after school"
+      }
+
+      var thisPeriod = state.thisPeriod
+      for(let period in scheduleToday){
+        let periodObj = scheduleToday[period]
+        if(periodObj.end > now){
+          if(periodObj.start <= now){
+            thisPeriod = periodObj
+          }
+        }
+      }
+      state.thisPeriod = thisPeriod;
+
+      var nextPeriod = state.nextPeriod
+      if(typeof thisPeriod == "object"){
+        var fourMinutesFromEndOfThisPeriod = new Date(thisPeriod.end.valueOf()+(4*60*1000))
+        for(let period in scheduleToday){
+          let periodObj = scheduleToday[period]
+          if(periodObj.end > fourMinutesFromEndOfThisPeriod){
+            if(periodObj.start <= fourMinutesFromEndOfThisPeriod){
+              nextPeriod = periodObj
+            }
+          }
+        }
+        state.nextPeriod = nextPeriod
+      }
+    }
+    return state
   }
+
 }
+
+var myWhatsnext = new whatsnext()//new Date(2018, 10, 12, 15))
+console.log(myWhatsnext.now(),  myWhatsnext, myWhatsnext.getState())
