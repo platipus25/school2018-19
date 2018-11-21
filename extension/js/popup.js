@@ -2,12 +2,13 @@
 function init(nowIn){
   console.group()
   console.time("init")
-  var now = (nowIn || new Date())
+  //var now = (nowIn || new Date())
   var lib = window.whatsnextInstance
+  //lib.schedule()
   var state = lib.getState()
 
-  $("#nowDate").text(lib.now())//now.weekdayShort+" "+now.toLocaleString(DateTime.DATE_SMALL))
-  $("#nowTime").text()//now.toLocaleString(DateTime.TIME_SIMPLE))
+  $("#nowDate").text(lib.now().toDateString())//now.weekdayShort+" "+now.toLocaleString(DateTime.DATE_SMALL))
+  $("#nowTime").text(lib.now().toLocaleTimeString())//now.toLocaleString(DateTime.TIME_SIMPLE))
 
   // check if isSchool
   var schoolInSession = state.nextDayOff;
@@ -20,15 +21,16 @@ function init(nowIn){
 
 
   // get Period
-  thisPeriod = lib.thisPeriod
-  nextPeriod = lib.nextPeriod
+  thisPeriod = state.thisPeriod
+  nextPeriod = state.nextPeriod
+  console.log(state)
   if(thisPeriod){
-    var ts = countdown(now.toJSDate(), thisPeriod.end.toJSDate(), countdown.HOURS| countdown.MINUTES)
+    var ts = countdown(lib.now(), thisPeriod.end, countdown.HOURS| countdown.MINUTES)
     console.log("periodCountdown", ts)
     $('#endOfPeriodCountdown').html(ts.toHTML());
 
     var periodName = thisPeriod.info.period
-    if(thisPeriod.period.subject) periodName = thisPeriod.period.subject
+    if(thisPeriod.info.subject) periodName = thisPeriod.period.subject
     if(!isNaN(parseInt(periodName))) periodName = "Period "+periodName
     console.log("This period is:", periodName)
     $("#thisPeriod").text(periodName)
@@ -40,12 +42,12 @@ function init(nowIn){
   if(!nextPeriod){
     $(".nextPeriod").text("__")
   }else{
-    console.log("Next period is:", nextPeriod)
+    console.log("Next period is:", nextPeriod.info.period || nextPeriod.info.subject)
     $(".nextPeriod").text("__")
-    for(field in nextPeriod.period){
-      $("#"+field).text(nextPeriod.period[field])
+    for(field in nextPeriod.info){
+      $("#"+field).text(nextPeriod.info[field])
     }
-    $("#time").text(nextPeriod.start.toLocaleString(DateTime.TIME_SIMPLE))
+    $("#time").text(nextPeriod.start.toLocaleTimeString())
   }
 
 
@@ -71,7 +73,8 @@ function randomDate(now){
 }
 
 $(document).ready(function(){
-  window.whatsnextInstance = new whatsnext()
+  window.whatsnextInstance = new whatsnext(new Date(2018, 10, 14, 8))
+  console.log(window.whatsnextInstance)
   //now = DateTime.local()//randomDate()
   //console.log(now.toISO())
   init()
