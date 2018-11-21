@@ -1,3 +1,4 @@
+// Ravago Jones whatsnext v2.1 11/21/18
 class whatsnext{
   constructor(time){
     this.time = (time || new Date())
@@ -148,6 +149,3 @@ class whatsnext{
   }
 
 }
-
-var myWhatsnext = new whatsnext()//new Date(2018, 10, 12, 15))
-console.log(myWhatsnext.now(),  myWhatsnext, myWhatsnext.getState())
