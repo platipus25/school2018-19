@@ -2,13 +2,11 @@
 function init(nowIn){
   console.group()
   console.time("init")
-  //var now = (nowIn || new Date())
   var lib = window.whatsnextInstance
-  //lib.schedule()
   var state = lib.getState()
 
-  $("#nowDate").text(lib.now().toDateString())//now.weekdayShort+" "+now.toLocaleString(DateTime.DATE_SMALL))
-  $("#nowTime").text(lib.now().toLocaleTimeString())//now.toLocaleString(DateTime.TIME_SIMPLE))
+  $("#nowDate").text(lib.now().toDateString())
+  $("#nowTime").text(lib.now().toLocaleTimeString())
 
   // check if isSchool
   var schoolInSession = state.nextDayOff;
