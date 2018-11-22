@@ -1,14 +1,15 @@
+// Ravago Jones whatsnext v2.1 11/21/18
 class whatsnext{
   constructor(time){
     this.time = (time || new Date())
     this.schedule_base = (function(){
         var Httpreq = new XMLHttpRequest(); // a new request
-        Httpreq.open("GET", "schedule2018_19.json", false);
+        Httpreq.open("GET", "js/schedule2018_19.json", false);
         Httpreq.send(null);
         return JSON.parse(Httpreq.responseText);
       })()
-    this.scheduleToday = null;
     this.periodInfo = {}
+    this.scheduleToday = this.schedule();
   }
 
   now(){
@@ -34,7 +35,7 @@ class whatsnext{
     if(now.toDateString() == this.time.toDateString() && this.scheduleToday){
       return this.scheduleToday
     }else{
-      this.scheduleToday == null;
+      this.scheduleToday = false
     }
     var state = this.getState()
     var day = state.day
@@ -148,6 +149,3 @@ class whatsnext{
   }
 
 }
-
-var myWhatsnext = new whatsnext()//new Date(2018, 10, 12, 15))
-console.log(myWhatsnext.now(),  myWhatsnext, myWhatsnext.getState())

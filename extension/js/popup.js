@@ -1,49 +1,36 @@
+
 function init(nowIn){
-  if(nowIn && !nowIn.isValid) return "invalid DateTime"
   console.group()
   console.time("init")
-  if(nowIn){
-    now = nowIn
-  }else{
-    now = DateTime.local()
-  }
-  window.now = now;
-  try{
-    if(todaysSchedule){
-      if(todaysSchedule.Break.start.toISODate() != now.toISODate()){
-        console.log(todaysSchedule.Break.start.toISODate())
-        todaysSchedule = null
-      }else{
-        console.log("still today")
-      }
-    }
-  }catch(exception){
-    console.log("todaysSchedule doesn't exist", exception)
-  }
+  //var now = (nowIn || new Date())
+  var lib = window.whatsnextInstance
+  //lib.schedule()
+  var state = lib.getState()
 
-  $("#nowDate").text(now.weekdayShort+" "+now.toLocaleString(DateTime.DATE_SMALL))
-  $("#nowTime").text(now.toLocaleString(DateTime.TIME_SIMPLE))
+  $("#nowDate").text(lib.now().toDateString())//now.weekdayShort+" "+now.toLocaleString(DateTime.DATE_SMALL))
+  $("#nowTime").text(lib.now().toLocaleTimeString())//now.toLocaleString(DateTime.TIME_SIMPLE))
 
   // check if isSchool
-  var schoolInSession = isSchool(now);
-  if(schoolInSession[0] == false){
+  var schoolInSession = state.nextDayOff;
+  if(schoolInSession && schoolInSession.rel == "next"){
     $("#noschool").show()
-    $("#noschool").text(schoolInSession[1])
+    $("#noschool").text(schoolInSession.name)
   }else{
     $("#noschool").hide()
   }
 
 
   // get Period
-  thisPeriod = getPeriod(now)
-  nextPeriod = getNextPeriod(now)
+  thisPeriod = state.thisPeriod
+  nextPeriod = state.nextPeriod
+  console.log(state)
   if(thisPeriod){
-    var ts = countdown(now.toJSDate(), thisPeriod.end.toJSDate(), countdown.HOURS| countdown.MINUTES)
+    var ts = countdown(lib.now(), thisPeriod.end, countdown.HOURS| countdown.MINUTES)
     console.log("periodCountdown", ts)
     $('#endOfPeriodCountdown').html(ts.toHTML());
 
-    var periodName = thisPeriod.period.period
-    if(thisPeriod.period.subject) periodName = thisPeriod.period.subject
+    var periodName = thisPeriod.info.period
+    if(thisPeriod.info.subject) periodName = thisPeriod.period.subject
     if(!isNaN(parseInt(periodName))) periodName = "Period "+periodName
     console.log("This period is:", periodName)
     $("#thisPeriod").text(periodName)
@@ -55,21 +42,21 @@ function init(nowIn){
   if(!nextPeriod){
     $(".nextPeriod").text("__")
   }else{
-    console.log("Next period is:", nextPeriod)
+    console.log("Next period is:", nextPeriod.info.period || nextPeriod.info.subject)
     $(".nextPeriod").text("__")
-    for(field in nextPeriod.period){
-      $("#"+field).text(nextPeriod.period[field])
+    for(field in nextPeriod.info){
+      $("#"+field).text(nextPeriod.info[field])
     }
-    $("#time").text(nextPeriod.start.toLocaleString(DateTime.TIME_SIMPLE))
+    $("#time").text(nextPeriod.start.toLocaleTimeString())
   }
 
 
-  nextDayOff = getNextDayOff(now)
+  /*nextDayOff = getNextDayOff(now)
 
   var ts = countdown(now.toJSDate(), nextDayOff[0].dates[0].toJSDate(), countdown.MONTHS|countdown.DAYS|countdown.HOURS)
   console.log("dayOffCountdown", ts)
   if(ts.value) $('#dayOffCountdown').html(ts.toHTML());
-  $("#nameOfBreak").text(nextDayOff[0].name)
+  $("#nameOfBreak").text(nextDayOff[0].name)*/
 
 
   console.timeEnd("init")
@@ -86,11 +73,11 @@ function randomDate(now){
 }
 
 $(document).ready(function(){
-
-  now = DateTime.local()//randomDate()
-  console.log(now.toISO())
-  init(now)
-
+  window.whatsnextInstance = new whatsnext(new Date(2018, 10, 14, 8))
+  console.log(window.whatsnextInstance)
+  //now = DateTime.local()//randomDate()
+  //console.log(now.toISO())
+  init()
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
   console.log("init interval:",setInterval(function(){init()}, 1*60*1000))
 });
