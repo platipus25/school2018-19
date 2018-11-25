@@ -4,6 +4,8 @@ import json
 class whatsnext():
     def __init__(self, datetimeIn = (None)):
         self.time = datetimeIn
+        if(type(datetimeIn) != datetime.datetime):
+            self.time = datetime.datetime.today()
         self.schedule_base = (json.loads(open("schedule2018_19.json").read()))
         self.periodInfo = {}
         self.scheduleToday = None
