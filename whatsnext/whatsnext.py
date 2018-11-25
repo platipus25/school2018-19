@@ -6,6 +6,7 @@ class whatsnext():
         self.time = datetimeIn
         self.schedule_base = (json.loads(open("schedule2018_19.json").read()))
         self.periodInfo = {}
+        self.scheduleToday = None
         self.scheduleToday = self.schedule()
 
     def now(self):
@@ -26,7 +27,7 @@ class whatsnext():
         if self.time and now.date() == self.time.date() and self.scheduleToday:
             return self.scheduleToday
         self.scheduleToday = False
-        state = {"day":"monday"} # TODO: this.state()
+        state = {"day":"monday"} # TODO: self.state
         day = state["day"]
         today_base = schedule[day]
         todaysObject = {}
@@ -85,8 +86,17 @@ class whatsnext():
 
         if self.scheduleToday:
             scheduleToday = self.schedule()
-            first = scheduleToday[1] or scheduleToday[2] # TODO: fix this
-            last = scheduleToday[8] or scheduleToday[7]
+            first = None
+            last = None
+            if "2" in scheduleToday:
+                first = scheduleToday["2"]
+            if "1" in scheduleToday:
+                first = scheduleToday["1"]
+            if "7" in scheduleToday:
+                last = scheduleToday["7"]
+            if "8" in scheduleToday:
+                last = scheduleToday["8"]
+
             start = first["start"]
             end = last["end"]
             if now.time() < start:
@@ -102,13 +112,21 @@ class whatsnext():
                 if periodObj["end"] > now.time():
                     if periodObj["start"] <= now.time():
                         thisPeriod = periodObj
-            state.thisPeriod = thisPeriod
+            state["thisPeriod"] = thisPeriod
 
-            print(type(thisPeriod))
+            if(type(thisPeriod) == type({"imADictionary":True})):
+                nextPeriod = state["nextPeriod"]
+                fourMinutesFromEndOfThisPeriod = (now+datetime.timedelta(minutes=4)).time()
+                for period in scheduleToday:
+                    periodObj = scheduleToday[period]
+                    if periodObj["end"] > fourMinutesFromEndOfThisPeriod:
+                        if periodObj["start"] <= fourMinutesFromEndOfThisPeriod:
+                            thisPeriod = periodObj
+                state["nextPeriod"] = thisPeriod
 
         return state
 
 
 if __name__ == "__main__":
-    inst = whatsnext()#datetime.datetime(2018, 11, 23, 8))
-    print(inst.scheduleToday, inst.state)
+    inst = whatsnext(datetime.datetime(2018, 11, 23, 10))
+    print(inst.state)
