@@ -3,10 +3,13 @@ function init(nowIn){
   console.group()
   console.time("init")
   var lib = window.whatsnextInstance
+  lib.periodInfo = {
+    "3":{
+      subject:"Science",
+      teacher:"Mr. Newman"
+    }
+  }
   var state = lib.getState()
-
-  $("#nowDate").text(lib.now().toDateString())
-  $("#nowTime").text(lib.now().toLocaleTimeString())
 
   // check if isSchool
   var schoolInSession = state.nextDayOff;
@@ -25,23 +28,30 @@ function init(nowIn){
   if(thisPeriod){
     var ts = countdown(lib.now(), thisPeriod.end, countdown.HOURS| countdown.MINUTES)
     console.log("periodCountdown", ts)
-    $('#endOfPeriodCountdown').html(ts.toHTML());
+    $('#thisPeriodCountdown').html(ts.toHTML());
 
     var periodName = thisPeriod.info.period
-    if(thisPeriod.info.subject) periodName = thisPeriod.period.subject
-    if(!isNaN(parseInt(periodName))) periodName = "Period "+periodName
+    if(thisPeriod.info.subject) periodName = thisPeriod.period.subject.toLowerCase()
+    if(!isNaN(parseInt(periodName))) periodName = "period "+periodName
     console.log("This period is:", periodName)
-    $("#thisPeriod").text(periodName)
+    $("#thisPeriodSubject").text(periodName)
   }else{
-    $("#thisPeriod").text("School")
-    $('#endOfPeriodCountdown').html("0 minutes");
+    $("#thisPeriodSubject").text("School")
+    $('#thisPeriodCountdown').html("0 minutes");
   }
 
   if(!nextPeriod){
     $(".nextPeriod").text("__")
   }else{
-    console.log("Next period is:", nextPeriod.info.period || nextPeriod.info.subject)
     $(".nextPeriod").text("__")
+    var periodName = nextPeriod.info.period
+    if(nextPeriod.info.subject) periodName = nextPeriod.period.subject.toLowerCase()
+    if(!isNaN(parseInt(periodName))) periodName = "period "+periodName
+    console.log("Next period is:"+periodName)
+    $("#nextPeriodSubject").text(periodName)
+
+    $("#nextPeriodTeacher").text(nextPeriod.info.teacher)
+
     for(field in nextPeriod.info){
       $("#"+field).text(nextPeriod.info[field])
     }
@@ -61,20 +71,11 @@ function init(nowIn){
   console.groupEnd()
 }
 
-function randomDate(now){
-  var random = function(min = 0, max = 1){
-    return Math.round(Math.random() * (max - min) ) + min;
-  }
-  var returnDate = DateTime.local(random(0, 1)?2018:2019, random(0, 12), random(0, 31), random(7, 14) /*random(0, 24)*/, random(0, 59))
-  if(returnDate.isValid && returnDate > DateTime.local()) return returnDate
-  return randomDate()
-}
+
 
 $(document).ready(function(){
-  window.whatsnextInstance = new whatsnext(new Date(2018, 10, 14, 8))
+  window.whatsnextInstance = new whatsnext(new Date(2018, 11, 12, 8))
   console.log(window.whatsnextInstance)
-  //now = DateTime.local()//randomDate()
-  //console.log(now.toISO())
   init()
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
   console.log("init interval:",setInterval(function(){init()}, 1*60*1000))

@@ -50,6 +50,7 @@ class whatsnext{
       todaysObject[period].end = this.objectToDate(periodObject.end)
       if(periodObject.info != null){
         todaysObject[period].info = {}
+        console.log(this.periodInfo.hasOwnProperty(period))
         if(this.periodInfo.hasOwnProperty(period)){
           todaysObject[period].info = this.periodInfo[period]
         }

@@ -2,7 +2,8 @@
   <head>
     <title>School Schedule 2018-19</title>
     <link rel="icon" type="image/png" href="img/clock32.png" />
-    <style>
+    <link rel="stylesheet" href="css/main.css" />
+    <!--<style>
       body{
         font-family:Arial, Helvetica, sans-serif;
         font-size:20px;
@@ -78,7 +79,7 @@
 
       }
 
-    </style>
+    </style>-->
     <meta name="viewport" content="width=400, initial-scale=1.0">
   </head>
   <body>
@@ -86,23 +87,21 @@
       <div id="noschool"></div>
       <strong>Now:</strong>
       <br />
-       <span id="thisPeriodContainer"><span class="thisPeriod" id="thisPeriodCountdown">0 minutes</span> left in <span class="thisPeriod" id="thisPeriodSubject"> School</span>school<span class="value"> </span>
+       <span id="thisPeriodContainer"><span class="thisPeriod" id="thisPeriodCountdown">0 minutes</span> left in <span class="thisPeriod" id="thisPeriodSubject"> School</span></span>
       <br>
       <strong>Next:</strong>
       <br>
-      <span id="nextPeriodContainer">Next period is <span class="nextPeriod" id="nextPeriodsubject">__</span> with <span class="nextPeriod" id="nextPeriodteacher">__</span></span>
+      <span id="nextPeriodContainer">Next period is <span class="nextPeriod" id="nextPeriodSubject">__</span> with <span class="nextPeriod" id="nextPeriodteacher">__</span></span>
       <br />
       <span id="nameOfBreak" class="field">Next Day Off</span>:  <span id="dayOffCountdown" class="value">unknown</span>
     </div>
 
     <a href="options.html" id="optionsLink">Add info about your classes</a>
 
-    <script src="js/luxon.min.js"></script>
     <script src="js/countdown.min.js"></script>
     <script src="js/store.modern.min.js"></script>
     <script src="js/jquery-3.3.1.slim.min.js"></script>
-    <script src="js/getPeriodInfo.js"></script>
     <script src="js/whatsnext.js"></script>
-    <script src="js/popup.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
