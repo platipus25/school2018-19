@@ -31,7 +31,7 @@ function init(nowIn){
     $('#thisPeriodCountdown').html(ts.toHTML());
 
     var periodName = thisPeriod.info.period
-    if(thisPeriod.info.subject) periodName = thisPeriod.period.subject.toLowerCase()
+    if(thisPeriod.info.subject) periodName = thisPeriod.info.subject
     if(!isNaN(parseInt(periodName))) periodName = "period "+periodName
     console.log("This period is:", periodName)
     $("#thisPeriodSubject").text(periodName)
@@ -45,7 +45,7 @@ function init(nowIn){
   }else{
     $(".nextPeriod").text("__")
     var periodName = nextPeriod.info.period
-    if(nextPeriod.info.subject) periodName = nextPeriod.period.subject.toLowerCase()
+    if(nextPeriod.info.subject) periodName = nextPeriod.info.subject.toLowerCase()
     if(!isNaN(parseInt(periodName))) periodName = "period "+periodName
     console.log("Next period is:"+periodName)
     $("#nextPeriodSubject").text(periodName)
@@ -59,12 +59,12 @@ function init(nowIn){
   }
 
 
-  /*nextDayOff = getNextDayOff(now)
+  nextDayOff = state.nextDayOff
 
-  var ts = countdown(now.toJSDate(), nextDayOff[0].dates[0].toJSDate(), countdown.MONTHS|countdown.DAYS|countdown.HOURS)
+  var ts = countdown(new Date(), nextDayOff.date, countdown.MONTHS|countdown.DAYS|countdown.HOURS)
   console.log("dayOffCountdown", ts)
   if(ts.value) $('#dayOffCountdown').html(ts.toHTML());
-  $("#nameOfBreak").text(nextDayOff[0].name)*/
+  $("#nameOfBreak").text(nextDayOff.name)
 
 
   console.timeEnd("init")
