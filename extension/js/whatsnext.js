@@ -1,4 +1,4 @@
-// Ravago Jones whatsnext v2.1 11/21/18
+// Ravago Jones whatsnext v2.2 1/4/19
 class whatsnext{
   constructor(time){
     this.time = (time || new Date())
@@ -50,11 +50,20 @@ class whatsnext{
       todaysObject[period].end = this.objectToDate(periodObject.end)
       if(periodObject.info != null){
         todaysObject[period].info = {}
-        console.log(this.periodInfo.hasOwnProperty(period))
-        if(this.periodInfo.hasOwnProperty(period)){
-          todaysObject[period].info = this.periodInfo[period]
+        if(!this.periodInfo.hasOwnProperty(period)){
+          this.periodInfo[period] = {}
         }
-        todaysObject[period].info.period = period
+        this.periodInfo[period].period = period
+        todaysObject[period].info = this.periodInfo[period]
+        // define values to be passed to the closure that is the getter
+        var closureRefToSelf = this
+        var closurePeriod = period
+        Object.defineProperty(todaysObject[period], 'info', {
+          enumerable: true,
+          get: function(){
+            return closureRefToSelf.periodInfo[closurePeriod]
+          }
+        })
       }
     }
 
