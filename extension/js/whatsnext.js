@@ -49,19 +49,18 @@ class whatsnext{
       todaysObject[period].start = this.objectToDate(periodObject.start)
       todaysObject[period].end = this.objectToDate(periodObject.end)
       if(periodObject.info != null){
-        todaysObject[period].info = {}
-        if(!this.periodInfo.hasOwnProperty(period)){
-          this.periodInfo[period] = {}
-        }
-        this.periodInfo[period].period = period
-        todaysObject[period].info = this.periodInfo[period]
         // define values to be passed to the closure that is the getter
-        var closureRefToSelf = this
-        var closurePeriod = period
+        let closureRefToSelf = this
+        let closurePeriod = period
         Object.defineProperty(todaysObject[period], 'info', {
           enumerable: true,
           get: function(){
-            return closureRefToSelf.periodInfo[closurePeriod]
+            var info = closureRefToSelf.periodInfo[closurePeriod]
+            if(!info){
+              info = {}
+            }
+            info.period = closurePeriod
+            return info
           }
         })
       }
