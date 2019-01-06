@@ -1,6 +1,46 @@
+
 input{
   border:0px;
   background-color:inherit;
   width:fit-content;
   min-width:0;
+}
+
+body{
+    font-size:1.2em;
+    background-color:#1e5799;
+    color: white;
+    font-family:Montserrat, sans-serif;
+    /*font-weight:500;*/
+    font-weight:100;
+}
+
+strong{
+    font-family:sans-serif;
+    color:palegoldenrod
+}
+
+#nextPeriodContainer, #thisPeriodContainer{
+    margin-left:1em;
+}
+
+.nextPeriod, .thisPeriod{
+    font-family:Georgia, serif;
+    font-weight:500;
+    color:#bfe1ef;/*#bfe1ef,#abeeff, powderblue*/
+}
+
+#container{
+    line-height:1.25;
+}
+
+a{
+    color:coral;
+}
+
+a:hover{
+    color:cornflowerblue;
+}
+
+#noschool{
 }
