@@ -2,7 +2,7 @@
   "name": "Crittenden School Schedule 2018-19",
   "short_name":"school2018-19",
   "description": "An extension with a popup that tells when the next period is.",
-  "version": "2.4.1",
+  "version": "3.0.0",
   "manifest_version":2,
   "browser_action": {
     "default_popup": "popup.html",
