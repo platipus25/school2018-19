@@ -56,6 +56,7 @@ class whatsnext{
           enumerable: true,
           get: function(){
             var info = closureRefToSelf.periodInfo[closurePeriod]
+            console.log("period: "+closurePeriod, "info: "+info, "periodInfo: "+closureRefToSelf.periodInfo)
             if(!info || info == undefined){
               info = {}
             }
