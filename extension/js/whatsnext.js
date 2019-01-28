@@ -40,7 +40,7 @@ class whatsnext{
     var state = this.getState()
     var day = state.day
 
-    var today_base = schedule[day]
+    var today_base = schedule[day].split()
     var todaysObject = {}
 
     for(let period in today_base){
@@ -50,13 +50,13 @@ class whatsnext{
       todaysObject[period].end = this.objectToDate(periodObject.end)
       if(periodObject.info != null){
         // define values to be passed to the closure that is the getter
-        let closureRefToSelf = this
-        let closurePeriod = period
+        var closureRefToSelf = this
+        var closurePeriod = period
         Object.defineProperty(todaysObject[period], 'info', {
           enumerable: true,
           get: function(){
             var info = closureRefToSelf.periodInfo[closurePeriod]
-            if(!info){
+            if(!info || info == undefined){
               info = {}
             }
             info.period = closurePeriod
