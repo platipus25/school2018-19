@@ -49,7 +49,7 @@ class whatsnext{
       todaysObject[period].start = this.objectToDate(periodObject.start)
       todaysObject[period].end = this.objectToDate(periodObject.end)
       
-      console.log("period: "+closurePeriod, "info: "+info, "periodInfo: "+closureRefToSelf.periodInfo, "has info: "+periodObject.info != null)
+      console.log("period: "+period, "has info: "+periodObject.info != null)
       if(periodObject.info != null){
         // define values to be passed to the closure that is the getter
         var closureRefToSelf = this
