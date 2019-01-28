@@ -42,27 +42,31 @@ class whatsnext{
 
     var today_base = schedule[day]
     var todaysObject = {}
-
+    
     for(let period in today_base){
       let periodObject = today_base[period]
       todaysObject[period] = {}
       todaysObject[period].start = this.objectToDate(periodObject.start)
       todaysObject[period].end = this.objectToDate(periodObject.end)
-      // define values to be passed to the closure that is the getter
-      var closureRefToSelf = this
-      var closurePeriod = period
-      Object.defineProperty(todaysObject[period], 'info', {
-        enumerable: true,
-        get: function(){
-          var info = closureRefToSelf.periodInfo[closurePeriod]
-          console.log("period: "+closurePeriod, "info: "+info, "periodInfo: "+closureRefToSelf.periodInfo)
-          if(!info || info == undefined){
-            info = {}
+      
+      console.log("period: "+closurePeriod, "info: "+info, "periodInfo: "+closureRefToSelf.periodInfo, "has info: "+periodObject.info != null)
+      if(periodObject.info != null){
+        // define values to be passed to the closure that is the getter
+        var closureRefToSelf = this
+        var closurePeriod = period
+        Object.defineProperty(todaysObject[period], 'info', {
+          enumerable: true,
+          get: function(){
+            var info = closureRefToSelf.periodInfo[closurePeriod]
+            console.log("period: "+closurePeriod, "info: "+info, "periodInfo: "+closureRefToSelf.periodInfo)
+            if(!info || info == undefined){
+              info = {}
+            }
+            info.period = closurePeriod
+            return info
           }
-          info.period = closurePeriod
-          return info
-        }
-      })
+        })
+      } 
     }
 
     if(today_base == undefined){
