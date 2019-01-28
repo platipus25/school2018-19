@@ -107,7 +107,7 @@ function init(nowIn){
 
 
 $(document).ready(function(){
-  let now = new Date(2019, 0, 8, 8, 5)
+  let now = new Date()//2019, 0, 8, 8, 5)
   window.whatsnextInstance = new whatsnext(now)//new Date(2018, 12, 8, now.getHours(), now.getMinutes()))
   console.log(window.whatsnextInstance)
   init()
