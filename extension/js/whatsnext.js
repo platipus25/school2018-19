@@ -40,7 +40,7 @@ class whatsnext{
     var state = this.getState()
     var day = state.day
 
-    var today_base = schedule[day].split()
+    var today_base = schedule[day]
     var todaysObject = {}
 
     for(let period in today_base){
