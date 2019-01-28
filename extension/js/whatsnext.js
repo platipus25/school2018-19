@@ -53,7 +53,7 @@ class whatsnext{
       if(periodObject.info != null){
         // define values to be passed to the closure that is the getter
         var closureRefToSelf = this
-        var closurePeriod = period
+        let closurePeriod = period
         Object.defineProperty(todaysObject[period], 'info', {
           enumerable: true,
           get: function(){
