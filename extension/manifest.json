@@ -5,7 +5,7 @@
   "version": "3.0.0",
   "manifest_version":2,
   "browser_action": {
-    "default_popup": "popup.html",
+    "default_popup": "main.html",
     "default_icon": {
         "16": "img/clock16.png",
         "32": "img/clock32.png"
@@ -20,5 +20,8 @@
       "32": "img/clock32.png",
       "48": "img/clock48.png",
       "128": "img/clock128.png"
-  }
+  },
+  "web_accessible_resources": [
+      "js/schedule2018_19.json"
+  ]
 }
