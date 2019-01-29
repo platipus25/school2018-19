@@ -42,28 +42,31 @@ class whatsnext{
 
     var today_base = schedule[day]
     var todaysObject = {}
-
+    
     for(let period in today_base){
       let periodObject = today_base[period]
       todaysObject[period] = {}
       todaysObject[period].start = this.objectToDate(periodObject.start)
       todaysObject[period].end = this.objectToDate(periodObject.end)
+      
+      console.log("period: "+period, "has info: "+periodObject.info != null)
       if(periodObject.info != null){
         // define values to be passed to the closure that is the getter
-        let closureRefToSelf = this
+        var closureRefToSelf = this
         let closurePeriod = period
         Object.defineProperty(todaysObject[period], 'info', {
           enumerable: true,
           get: function(){
             var info = closureRefToSelf.periodInfo[closurePeriod]
-            if(!info){
+            console.log("period: "+closurePeriod, "info: "+info, "periodInfo: "+closureRefToSelf.periodInfo)
+            if(!info || info == undefined){
               info = {}
             }
             info.period = closurePeriod
             return info
           }
         })
-      }
+      } 
     }
 
     if(today_base == undefined){
