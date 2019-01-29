@@ -17,7 +17,7 @@ function init(nowIn){
     var _isSchool = state.day
     
     // isSchool
-    if("min,mon,tue,thu,fri".includes(_isSchool.slice(0, 3))){
+    if("min,mon,tue,thu,fri".includes(_isSchool.slice(0, 3))){ // is min mon tue thu fri
         if(state.nextDayOff.rel == "now"){
             _isSchool = state.nextDayOff.name
         }else if(typeof _this == "string"){
@@ -33,7 +33,8 @@ function init(nowIn){
             var postFixes = ["", "st", "nd", "rd", "th", "th", "th", "th", "th"]
             if(!object.info.hasOwnProperty("subject")){
                 let period = object.info.period
-                object._info.subject = period+postFixes[parseInt(period)]
+                let postFix = (postFixes[parseInt(period)] || "")
+                object._info.subject = period+postFix+" period"
             }
         }else{
             object = null
@@ -101,8 +102,7 @@ function init(nowIn){
 
 
 $(document).ready(function(){
-  window.whatsnextInstance = new whatsnext(new Date())
-  console.log(window.whatsnextInstance)
+  window.whatsnextInstance = new whatsnext(new Date(2019, 0, 28, 12))
   init()
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
   console.log("init interval:",setInterval(function(){init()}, 1*60*1000))
