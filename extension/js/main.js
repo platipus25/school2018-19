@@ -67,7 +67,7 @@ function init(nowIn){
         console.log("periodCountdown", ts)
         $('#thisPeriodCountdown').html(ts.toHTML());
 
-        var periodName = thisPeriod.info.subject
+        var periodName = thisPeriod._info.subject
         $("#thisPeriodSubject").text(periodName)
     }else{
         $("#thisPeriodSubject").text("School")
