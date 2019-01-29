@@ -1,8 +1,8 @@
 
 function init(nowIn){
-    console.time("init")
     var lib = window.whatsnextInstance
 
+    console.log(lib) //
     lib.periodInfo = {
         "3":{
           subject:"Science",
@@ -31,7 +31,6 @@ function init(nowIn){
         if(object && typeof object != "string"){
             object._info = object.info
             var postFixes = ["", "st", "nd", "rd", "th", "th", "th", "th", "th"]
-            console.log(object)
             if(!object.info.hasOwnProperty("subject")){
                 let period = object.info.period
                 object._info.subject = period+postFixes[parseInt(period)]
@@ -43,9 +42,6 @@ function init(nowIn){
     }
     _this = computePeriodObject(_this)
     _next = computePeriodObject(_next)
-    
-    
-    console.log(_isSchool, _this, _next)
     
     
     
@@ -100,15 +96,12 @@ function init(nowIn){
     if(ts.value) $('#dayOffCountdown').html(ts.toHTML());
     $("#nameOfBreak").text(nextDayOff.name)
 
-
-    console.timeEnd("init")
 }
 
 
 
 $(document).ready(function(){
-  let now = new Date(2019, 0, 8, 8, 5)
-  window.whatsnextInstance = new whatsnext(now)//new Date(2018, 12, 8, now.getHours(), now.getMinutes()))
+  window.whatsnextInstance = new whatsnext(new Date())
   console.log(window.whatsnextInstance)
   init()
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
