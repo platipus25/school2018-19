@@ -7,21 +7,18 @@ input{
 }
 
 body{
-    font-size:1.2em;
-    background-color:#1e5799;
-    color: white;
     font-family:Montserrat, sans-serif;
-    /*font-weight:500;*/
+    font-size:1.2em;
     font-weight:100;
+    color: white;
+    line-height:1.25;
+    background-color:#1e5799;
+    white-space:nowrap;
 }
 
 strong{
     font-family:sans-serif;
-    color:palegoldenrod
-}
-
-#nextPeriodContainer, #thisPeriodContainer{
-    margin-left:1em;
+    color:palegoldenrod;
 }
 
 .nextPeriod, .thisPeriod{
@@ -31,7 +28,7 @@ strong{
 }
 
 #container{
-    line-height:1.25;
+    
 }
 
 a{
@@ -43,4 +40,10 @@ a:hover{
 }
 
 #noschool{
+    
 }
+
+.indent{
+    margin-left:1em;
+}
+
