@@ -48,9 +48,7 @@ class whatsnext{
       todaysObject[period] = {}
       todaysObject[period].start = this.objectToDate(periodObject.start)
       todaysObject[period].end = this.objectToDate(periodObject.end)
-      
-      console.log("period: "+period, "has info: "+periodObject.info != null)
-      if(periodObject.info != null){
+      //if(periodObject.info != null){
         // define values to be passed to the closure that is the getter
         var closureRefToSelf = this
         let closurePeriod = period
@@ -58,7 +56,6 @@ class whatsnext{
           enumerable: true,
           get: function(){
             var info = closureRefToSelf.periodInfo[closurePeriod]
-            console.log("period: "+closurePeriod, "info: "+info, "periodInfo: "+closureRefToSelf.periodInfo)
             if(!info || info == undefined){
               info = {}
             }
@@ -66,7 +63,7 @@ class whatsnext{
             return info
           }
         })
-      } 
+      //}
     }
 
     if(today_base == undefined){
