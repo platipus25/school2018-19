@@ -2,15 +2,20 @@
 function init(nowIn){
     var lib = window.whatsnextInstance
 
-    console.log(lib) //
+    //console.log(lib) //
     lib.periodInfo = {
-        "3":{
+        "1":{
           subject:"Science",
-          teacher:"Mr. Newman"
+          teacher:"Mr. Newman",
+          room:209
+        },
+        "7":{
+          subject:"English",
+          teacher:"Sumi"
         }
     }
     var state = lib.getState()
-    console.log(state)
+    //console.log(JSON.stringify(state))
     
     var _this = state.thisPeriod
     var _next = state.nextPeriod
@@ -31,10 +36,15 @@ function init(nowIn){
         if(object && typeof object != "string"){
             object._info = object.info
             var postFixes = ["", "st", "nd", "rd", "th", "th", "th", "th", "th"]
-            if(!object.info.hasOwnProperty("subject")){
+            if(!object.info.hasOwnProperty("name") && !object.info.hasOwnProperty("subject")){
                 let period = object.info.period
                 let postFix = (postFixes[parseInt(period)] || "")
-                object._info.subject = period+postFix+" period"
+                if(period[0] == "p"){ // Passing Period
+                    period = "Passing Period"
+                }else{
+                    postFix += " period"
+                }
+                object._info.name = period+postFix
             }
         }else{
             object = null
@@ -44,7 +54,9 @@ function init(nowIn){
     _this = computePeriodObject(_this)
     _next = computePeriodObject(_next)
     
-    
+    console.log("\n")
+    console.log(JSON.stringify(_this))
+    console.log(JSON.stringify(_next))
     
     
     
@@ -65,7 +77,7 @@ function init(nowIn){
     
     if(thisPeriod){
         var ts = countdown(lib.now(), thisPeriod.end, countdown.HOURS| countdown.MINUTES)
-        console.log("periodCountdown", ts)
+        //console.log("periodCountdown", ts)
         $('#thisPeriodCountdown').html(ts.toHTML());
 
         var periodName = thisPeriod._info.subject
@@ -93,7 +105,7 @@ function init(nowIn){
     nextDayOff = state.nextDayOff
 
     var ts = countdown(lib.now(), nextDayOff.date, countdown.MONTHS|countdown.DAYS|countdown.HOURS)
-    console.log("dayOffCountdown", ts)
+    //console.log("dayOffCountdown", ts)
     if(ts.value) $('#dayOffCountdown').html(ts.toHTML());
     $("#nameOfBreak").text(nextDayOff.name)
 
@@ -102,8 +114,13 @@ function init(nowIn){
 
 
 $(document).ready(function(){
-  window.whatsnextInstance = new whatsnext(new Date(2019, 0, 28, 12))
+  window.whatsnextInstance = new whatsnext(new Date(2019, 0, 29, 7, 55))
   init()
+                  i = 0.5
+                  setInterval(function(){
+                              window.whatsnextInstance.time = new Date(window.whatsnextInstance.time.valueOf()+(i*1000*60))
+                              init()
+                              }, i*1000*0.5)
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
   console.log("init interval:",setInterval(function(){init()}, 1*60*1000))
 });
