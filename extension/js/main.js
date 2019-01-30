@@ -21,9 +21,9 @@ function init(nowIn){
     var _this = state.thisPeriod
     var _next = state.nextPeriod
     var _isSchool = state.day
-    
+
     // isSchool
-    if("min,mon,tue,thu,fri".includes(_isSchool.slice(0, 3))){ // is min mon tue thu fri
+    if("min,mon,tue,wed,thu,fri".includes(_isSchool.slice(0, 3))){ // is min mon tue wed thu fri
         if(state.nextDayOff.rel == "now"){
             _isSchool = state.nextDayOff.name
         }else if(typeof _this == "string"){
@@ -60,9 +60,9 @@ function init(nowIn){
     _this = computePeriodObject(_this)
     _next = computePeriodObject(_next)
     
-    
-    console.log(JSON.stringify(_this._info.name))
-    console.log(JSON.stringify(_next._info.name))
+    if(_this) console.log(JSON.stringify(_this._info.name))
+    if(_next) console.log(JSON.stringify(_next._info.name))
+    //console.log(_isSchool)
     
     
     
@@ -84,29 +84,24 @@ function init(nowIn){
     if(thisPeriod){
         var ts = countdown(lib.now(), thisPeriod.end, countdown.HOURS| countdown.MINUTES)
         //console.log("periodCountdown", ts)
-        $('#thisPeriodCountdown').html(ts.toHTML());
+        $("#thisPeriodCountdown").html(ts.toHTML());
 
         var periodName = thisPeriod._info.name
         $("#thisPeriodSubject").text(periodName)
     }else{
         $("#thisPeriodSubject").text("School")
-        $('#thisPeriodCountdown').html("0 minutes");
+        $("#thisPeriodCountdown").html("0 minutes");
     }
 
+    // to reset
+    $("#nextPeriodPeriodSubject").text("__")
+    $("#nextPeriodTeacher").html("__");
     if(nextPeriod){
-        var periodName = nextPeriod.info.subject
+        var periodName = nextPeriod._info.name
         $("#nextPeriodSubject").text(periodName)
 
         $("#nextPeriodTeacher").text(nextPeriod.info.teacher) //
-
-        for(field in nextPeriod.info){ //
-            $("#"+field).text(nextPeriod.info[field])//
-        }//
-        $("#time").text(nextPeriod.start.toLocaleTimeString()) //
-    }else{
-        $(".nextPeriod").text("__")
     }
-
 
     nextDayOff = state.nextDayOff
 
@@ -120,13 +115,9 @@ function init(nowIn){
 
 
 $(document).ready(function(){
-  window.whatsnextInstance = new whatsnext(new Date(2019, 0, 30, 7, 55))
+  window.whatsnextInstance = new whatsnext()//new Date(2019, 0, 30, 12, 50))
   init()
-                  i = 0.5
-                  setInterval(function(){
-                              window.whatsnextInstance.time = new Date(window.whatsnextInstance.time.valueOf()+(i*1000*60))
-                              init()
-                              }, i*1000*0.5)
+                  //setInterval(function(){console.log(window.whatsnextInstance.time = new Date(window.whatsnextInstance.time.valueOf()+(36000)));init()}, 500*0.25)
   $("#optionsLink").click(function(){chrome.runtime.openOptionsPage()})
   console.log("init interval:",setInterval(function(){init()}, 1*60*1000))
 });
