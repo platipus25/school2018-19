@@ -124,7 +124,7 @@ class whatsnext{
         state.thisPeriod = "before school"
         state.nextPeriod = "before school"
       }
-      if(now > end) {
+      if(now >= end) {
         state.thisPeriod = "after school"
         state.nextPeriod = "after school"
       }
