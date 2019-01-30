@@ -1,5 +1,6 @@
 
 function init(nowIn){
+    console.log("\n")
     var lib = window.whatsnextInstance
 
     //console.log(lib) //
@@ -36,16 +37,21 @@ function init(nowIn){
         if(object && typeof object != "string"){
             object._info = object.info
             var postFixes = ["", "st", "nd", "rd", "th", "th", "th", "th", "th"]
-            if(!object.info.hasOwnProperty("name") && !object.info.hasOwnProperty("subject")){
-                let period = object.info.period
-                let postFix = (postFixes[parseInt(period)] || "")
-                if(period[0] == "p"){ // Passing Period
-                    period = "Passing Period"
-                }else{
-                    postFix += " period"
-                }
+            let period = object.info.period
+            let postFix = (postFixes[parseInt(period)] || "")
+            if(period[0] == "p"){ // Passing Period
+                period = "Passing Period"
+            }else{
+                postFix += " period"
+            }
+            if(!object.info.hasOwnProperty("name")){
                 object._info.name = period+postFix
             }
+            
+            if(object.info.hasOwnProperty("subject")){
+                object._info.name = object._info.subject
+            }
+            
         }else{
             object = null
         }
@@ -54,9 +60,9 @@ function init(nowIn){
     _this = computePeriodObject(_this)
     _next = computePeriodObject(_next)
     
-    console.log("\n")
-    console.log(JSON.stringify(_this))
-    console.log(JSON.stringify(_next))
+    
+    console.log(JSON.stringify(_this._info.name))
+    console.log(JSON.stringify(_next._info.name))
     
     
     
@@ -80,7 +86,7 @@ function init(nowIn){
         //console.log("periodCountdown", ts)
         $('#thisPeriodCountdown').html(ts.toHTML());
 
-        var periodName = thisPeriod._info.subject
+        var periodName = thisPeriod._info.name
         $("#thisPeriodSubject").text(periodName)
     }else{
         $("#thisPeriodSubject").text("School")
@@ -114,7 +120,7 @@ function init(nowIn){
 
 
 $(document).ready(function(){
-  window.whatsnextInstance = new whatsnext(new Date(2019, 0, 29, 7, 55))
+  window.whatsnextInstance = new whatsnext(new Date(2019, 0, 30, 7, 55))
   init()
                   i = 0.5
                   setInterval(function(){
