@@ -35,14 +35,16 @@ function set(periodsToSet){
 
 function save(){
   get()
-  if(chrome.storage){
-    chrome.storage.sync.set(periods, function() {
-      var status = $('#status');
-      status.text('Options saved.');
-      setTimeout(function() {
-        status.text('');
-      }, 750);
-    });
+  if("chrome" in window){
+    if("storage" in chrome){
+        chrome.storage.sync.set(periods, function() {
+                              var status = $('#status');
+                              status.text('Options saved.');
+                              setTimeout(function() {
+                                         status.text('');
+                                         }, 750);
+                              });
+    }
   }
   if(store){
     store.set("periodInfo", periods)
@@ -50,10 +52,12 @@ function save(){
 }
 
 function restore(){
-  if(chrome.storage){
-    chrome.storage.sync.get(periods, function(items) {
-      periods = items
-    });
+    if("chrome" in window){
+        if("storage" in chrome){
+            chrome.storage.sync.get(periods, function(items) {
+              periods = items
+            });
+        }
   }
   if(store){
     let tempPeriods = store.get("periodInfo")
