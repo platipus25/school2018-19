@@ -4,7 +4,8 @@ function init(nowIn){
     var lib = window.whatsnextInstance
 
     //console.log(lib) //
-    lib.periodInfo = {
+    lib.periodInfo = store.get("periodInfo") || {}
+    /* = {
         "1":{
           subject:"Science",
           teacher:"Mr. Newman",
@@ -14,7 +15,7 @@ function init(nowIn){
           subject:"English",
           teacher:"Sumi"
         }
-    }
+    }*/
     var state = lib.getState()
     //console.log(JSON.stringify(state))
     
