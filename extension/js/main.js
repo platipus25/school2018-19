@@ -123,5 +123,7 @@ $(document).ready(function(){
   console.log("init interval:",setInterval(function(){init()}, 1*60*1000))
 });
 $(window).focus(function(){
-  init()
+                if(window.hasOwnProperty("whatsnextInstance")){
+                    init()
+                }
 })
